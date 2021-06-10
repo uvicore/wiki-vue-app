@@ -1,20 +1,85 @@
-export interface Space {
+import axios from 'axios';
+import { Store } from "@/uvicore/store"
+import {reactive} from 'vue';
+
+
+export interface Topic extends Object {
   id: number,
   slug: string,
-  section: string,
+  name: string,
+  desc?: string,
+  icon?: string,
+  order: number,
+  section_id: number,
+}
+export type Topics = Topic[];
+
+export interface Section extends Object {
+  id: number,
+  slug: string,
+  name: string,
+  icon?: string,
+  order: number,
+  space_id: number,
+  topics: Topics,
+}
+export type Sections = Section[];
+
+export interface Space extends Object {
+  id: number,
+  slug: string,
   name: string,
   order: number,
+  sections: Sections,
 }
-
 export type Spaces = Space[];
 
 
 
-// This is a variant of the original data
-export interface SpacesVariant {
-  section: string,
-  spaces: Spaces,
+const api = axios.create({
+  baseURL: "https://wiki-api-local.triglobal.io/api",
+});
+
+
+
+class SpaceStore extends Store<Spaces> {
+  protected data(): Spaces {
+    return [];
+  }
+
+  getSpaces() {
+    this.clearState()
+    api.get('/spaces?include=sections.topics').then((res) => {
+      setTimeout(() => { // Fake timer for loading screens
+        const spaces: Spaces = res && res.data;
+        for (var space of spaces) {
+          this.state.push(space);
+        }
+      }, 0);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  }
+
+  setSpaces(spaces: Spaces) {
+    this.state = spaces;
+  }
+
+  tweak() {
+    this.state[0].name += '2';
+  }
 }
+
+export const spaceStore: SpaceStore = new SpaceStore()
+
+
+
+// // This is a variant of the original data
+// export interface SpacesVariant {
+//   section: string,
+//   spaces: Spaces,
+// }
 
 
 // // Notice the plural of Presets is NOT an array of objects but an object of objects using the preset key

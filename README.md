@@ -4,7 +4,7 @@
 npm init @vitejs/app
 npm instal --save vue@next vue-router@4 vuex@next axios
 npm install --save-dev eslint eslint-plugin-vue
-npm install -save-dev tailwindcss@latest postcss@latest autoprefixer@latest
+npm install -save-dev tailwindcss@latest @ postcss@latest autoprefixer@latest
 npx tailwindcss init -p
 
 

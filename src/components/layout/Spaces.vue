@@ -1,13 +1,6 @@
-<template>
+<!--<template>
 
   <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
-
-    <!-- <ul>
-      <li v-for="space in spaces" :key="space.id">
-        {{ space.name }}
-      </li>
-    </ul> -->
-
     <router-link to="/" :aria-current-value="page" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
       Home
     </router-link>
@@ -15,7 +8,6 @@
     <router-link to="/about" :aria-current-value="page" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
       About
     </router-link>
-
 
     <div
       v-for="section in spaces" :key="section.section"
@@ -43,20 +35,7 @@
         </router-link>
       </div>
     </div>
-
-
-
-    <!-- <router-link
-      v-for="space in spaces" :key="space.id"
-      :to="space.slug"
-      :aria-current-value="page"
-      class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-    >
-        {{ space.name }}
-    </router-link> -->
-
   </div>
-
 </template>
 
 <style scoped>
@@ -123,3 +102,4 @@ export default defineComponent({
 });
 </script>
 
+-->

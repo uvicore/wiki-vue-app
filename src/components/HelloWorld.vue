@@ -1,5 +1,5 @@
 <template>
-  <h1>{{ msg }}</h1>
+  <h1 @click="msgClick">{{ msg }}</h1>
 
   <p>
     Recommended IDE setup:
@@ -28,6 +28,7 @@
   </p>
 
   <!-- <button @click="incrementCount">count is: {{ $store.state.count }}</button> -->
+  <button @click="incrementCount">count is: {{ counterState.count }}</button>
   <p>
     Edit
     <code>components/HelloWorld.vue</code> to test hot module replacement.
@@ -37,7 +38,10 @@
 <script lang="ts">
 
 import { ref, defineComponent } from 'vue'
-//import { useStore } from '@/store';
+//import { useStore } from '@/store'
+import { counterStore } from '@/store/counter'
+import { spaceStore } from '@/models/space';
+
 
 export default defineComponent({
   name: 'HelloWorld',
@@ -57,15 +61,32 @@ export default defineComponent({
     // }
     // const count = ref(0)
     // return { count }
+
+    return {
+      counterState: counterStore.getState(),
+      spaces: spaceStore.getState(),
+    }
   },
 
   methods: {
-    // incrementCount() {
-    //   console.log('incrementCount clicked');
-    //   console.log(this.$store);
-    //   this.$store.commit('increment');
-    //   console.log(this.$store.state.count);
-    // }
+    msgClick() {
+      console.log(this.msg);
+      console.log(this.$api);
+    },
+
+    incrementCount() {
+      console.log('incrementCount clicked');
+      counterStore.incrementCount()
+      console.log(this.counterState);
+
+      if (this.spaces.length) {
+        spaceStore.tweak()
+      }
+
+      // console.log(this.$store);
+      // this.$store.commit('increment');
+      // console.log(this.$store.state.count);
+    }
   }
 
 })

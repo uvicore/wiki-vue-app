@@ -3,7 +3,7 @@
   <Layout>
 
     <template v-slot:header-logo>
-      <div @click="this.$router.push('/')" class="flex-shrink-0 flex items-center">
+      <div @click="changeRoute('/')" class="flex-shrink-0 flex items-center">
         <img class="block lg:hidden h-8 w-auto" src="@/assets/images/logo.png" alt="Workflow" />
         <img class="hidden lg:block h-8 w-auto" src="@/assets/images/logo.png" alt="Workflow" />
       </div>
@@ -91,7 +91,6 @@ const subNavigation = [
   { name: 'Integrations', href: '#', icon: ViewGridAddIcon, current: false },
 ]
 
-
 export default defineComponent({
   name: 'App',
   components: {
@@ -118,6 +117,12 @@ export default defineComponent({
   setup() {
     return {
       subNavigation,
+    }
+  },
+
+  methods: {
+    changeRoute(route: string) {
+      this.$router.push(route)
     }
   }
 })

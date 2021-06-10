@@ -1,55 +1,57 @@
 <template>
 
-  <PopoverGroup
-    v-for="space in spaces" :key="space.id"
-    as="nav"
-    class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-  >
+  <router-link to="/about">adsf</router-link>
 
-    <Popover v-slot="{ open }" class="relative">
-      <PopoverButton :class="[open ? 'text-gray-900' : 'text-gray-500', 'group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500']">
-        <span>{{space.name}}</span>
-        <ChevronDownIcon :class="[open ? 'text-gray-600' : 'text-gray-400', 'ml-2 h-5 w-5 group-hover:text-gray-500']" aria-hidden="true" />
-      </PopoverButton>
+  <div v-if="spaces.length" class="inline-flex items-center">
+    <PopoverGroup v-for="space in spaces" :key="space.id" as="nav" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-5 pt-1 border-b-2 text-sm font-medium">
+      <Popover v-slot="{ open }" class="relative">
+        <PopoverButton :class="[open ? 'text-gray-900' : 'text-gray-500', 'group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500']">
+          <span>{{space.name}}</span>
+          <ChevronDownIcon :class="[open ? 'text-gray-600' : 'text-gray-400', 'ml-2 h-5 w-5 group-hover:text-gray-500']" aria-hidden="true" />
+        </PopoverButton>
 
-      <transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-1">
-        <PopoverPanel v-slot="{ open }" @click="open = !open" class="absolute z-10 -ml-4 mt-3 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2">
-          <div class="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-            <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+        <transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-1">
+          <PopoverPanel class="absolute z-10 -ml-4 mt-3 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2">
+            <div class="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
+              <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
 
-              <router-link
-                v-for="section in space.sections" :key="section.id"
-                :to="space.slug + section.slug"
-                class="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50"
+                <router-link
+                  v-for="section in space.sections" :key="section.id"
+                  :to="space.slug + section.slug"
+                  class="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50"
 
-              >
-                <component :is="section.icon" class="flex-shrink-0 h-6 w-6 text-indigo-600" aria-hidden="true" />
-                <div class="ml-4">
-                  <p class="text-base font-medium text-gray-900">
-                    {{ section.name }}
-                  </p>
-                  <p class="mt-1 text-sm text-gray-500">
-                    {{ section.description }}
-                  </p>
+                >
+                  <component :is="section.icon" class="flex-shrink-0 h-6 w-6 text-indigo-600" aria-hidden="true" />
+                  <div class="ml-4">
+                    <p class="text-base font-medium text-gray-900">
+                      {{ section.name }}
+                    </p>
+                    <p class="mt-1 text-sm text-gray-500">
+                      <!-- {{ section.description }} -->
+                      desc here
+                    </p>
+                  </div>
+                </router-link>
+
+              </div>
+              <div class="px-5 py-5 bg-gray-50 space-y-6 sm:flex sm:space-y-0 sm:space-x-10 sm:px-8">
+                <div v-for="item in callsToAction" :key="item.name" class="flow-root">
+                  <a :href="item.href" class="-m-3 p-3 flex items-center rounded-md text-base font-medium text-gray-900 hover:bg-gray-100">
+                    <component :is="item.icon" class="flex-shrink-0 h-6 w-6 text-gray-400" aria-hidden="true" />
+                    <span class="ml-3">{{ item.name }}</span>
+                  </a>
                 </div>
-              </router-link>
-
-            </div>
-            <div class="px-5 py-5 bg-gray-50 space-y-6 sm:flex sm:space-y-0 sm:space-x-10 sm:px-8">
-              <div v-for="item in callsToAction" :key="item.name" class="flow-root">
-                <a :href="item.href" class="-m-3 p-3 flex items-center rounded-md text-base font-medium text-gray-900 hover:bg-gray-100">
-                  <component :is="item.icon" class="flex-shrink-0 h-6 w-6 text-gray-400" aria-hidden="true" />
-                  <span class="ml-3">{{ item.name }}</span>
-                </a>
               </div>
             </div>
-          </div>
-        </PopoverPanel>
-      </transition>
+          </PopoverPanel>
+        </transition>
 
-    </Popover>
-
-  </PopoverGroup>
+      </Popover>
+    </PopoverGroup>
+  </div>
+  <div v-else class="border-transparent hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+    <Loading msg="loading spaces..." />
+  </div>
 
 
   <!-- <a href="#" class="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
@@ -84,6 +86,7 @@ import {
   XIcon,
 } from '@heroicons/vue/outline'
 import { ChevronDownIcon } from '@heroicons/vue/solid'
+import Loading from '@/uvicore/components/loading/Loading1.vue'
 
 const spaces = [
   {
@@ -215,6 +218,8 @@ const callsToAction = [
   { name: 'Add Section', href: '#', icon: PhoneIcon },
 ]
 
+import { spaceStore } from '@/models/space';
+
 export default defineComponent({
   name: 'SpacesNav',
 
@@ -226,27 +231,22 @@ export default defineComponent({
     ChevronDownIcon,
     MenuIcon,
     XIcon,
+    Loading,
   },
 
   setup() {
+    //spacesStore.getSpaces()
+
     return {
-      spaces,
+      //spaces,
+      spaces: spaceStore.getState(),
       solutions,
       callsToAction,
     }
   },
+
+  created() {
+    spaceStore.getSpaces();
+  }
 })
 </script>
-
-
-IT
-  Branch
-    Dallas
-      Servers
-      Networking
-      Info
-    Warehouse
-      Servers
-      Networking
-      Info
-  CoreSpace
