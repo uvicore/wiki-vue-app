@@ -28,7 +28,7 @@
   </p>
 
   <!-- <button @click="incrementCount">count is: {{ $store.state.count }}</button> -->
-  <button @click="incrementCount">count is: {{ counterState.count }}</button>
+  <button @click="incrementCount">count is: {{ counter.count }}</button>
   <p>
     Edit
     <code>components/HelloWorld.vue</code> to test hot module replacement.
@@ -37,10 +37,12 @@
 
 <script lang="ts">
 
-import { ref, defineComponent } from 'vue'
+import { ref, defineComponent, onMounted } from 'vue'
 //import { useStore } from '@/store'
-import { counterStore } from '@/store/counter'
-import { spaceStore } from '@/models/space';
+//import { counterStore } from '@/store/counter'
+import { counterStore } from '@/store';
+//import { spaceStore } from '@/models/space';
+import { Space } from '@/models';
 
 
 export default defineComponent({
@@ -53,7 +55,11 @@ export default defineComponent({
     }
   },
 
-  setup: () => {
+  setup(props) {
+
+    const counter = counterStore();
+
+
     //const store = useStore()
     //console.log(store);
     // return {
@@ -62,32 +68,39 @@ export default defineComponent({
     // const count = ref(0)
     // return { count }
 
+    function incrementCount() {
+      counter.incrementCount();
+
+    }
+
     return {
-      counterState: counterStore.getState(),
-      spaces: spaceStore.getState(),
+      counter, incrementCount
+
+      //counterState: counterStore.getState(),
+      //spaces: spaceStore.getState(),
     }
   },
 
-  methods: {
-    msgClick() {
-      console.log(this.msg);
-      console.log(this.$api);
-    },
+  //methods: {
+    // msgClick() {
+    //   console.log(this.msg);
+    //   console.log(this.$api);
+    // },
 
-    incrementCount() {
-      console.log('incrementCount clicked');
-      counterStore.incrementCount()
-      console.log(this.counterState);
+  //   incrementCount() {
+  //     console.log('incrementCount clicked');
+  //     counterStore.incrementCount()
+  //     console.log(this.counterState);
 
-      if (this.spaces.length) {
-        spaceStore.tweak()
-      }
+  //     if (this.spaces.length) {
+  //       spaceStore.tweak()
+  //     }
 
-      // console.log(this.$store);
-      // this.$store.commit('increment');
-      // console.log(this.$store.state.count);
-    }
-  }
+  //     // console.log(this.$store);
+  //     // this.$store.commit('increment');
+  //     // console.log(this.$store.state.count);
+  //   }
+  // }
 
 })
 </script>

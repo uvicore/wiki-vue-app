@@ -10,13 +10,14 @@ import './assets/css/app.css';
 import { config } from '@/config';
 import { Auth } from '@/uvicore/auth';
 import { Config } from '@/uvicore/config';
-
+import { createPinia } from 'pinia';
 
 // Create main vue application
 const app = createApp(App);
 
 // Add vue plugins
 app.use(Config, config);
+app.use(createPinia());
 app.use(Auth, {
   router: Router,
   config: config.auth

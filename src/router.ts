@@ -24,7 +24,7 @@ const routes: Array<RouteRecordRaw> = [
 
   },
   {
-    path: '/:sectionName/:spaceName',
+    path: '/:space/:section/:topic',
     name: 'Post',
     component: Post,
   }

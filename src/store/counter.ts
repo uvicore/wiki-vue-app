@@ -1,19 +1,21 @@
-import { Store } from "@/uvicore/store"
+import { defineStore } from 'pinia';
 
-interface Counter extends Object {
-  count: number
-}
+export const counterStore = defineStore({
+  id: 'counter',
 
-class CounterStore extends Store<Counter> {
-  protected data(): Counter {
-    return {
-      count: 0
+  state: () => ({
+    count: 0,
+  }),
+
+  getters: {
+
+  },
+
+  actions: {
+    incrementCount() {
+      this.count ++;
     }
-  }
 
-  incrementCount() {
-    this.state.count++;
-  }
-}
+  },
 
-export const counterStore: CounterStore = new CounterStore()
+});

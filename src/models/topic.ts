@@ -2,17 +2,21 @@ import axios from 'axios';
 import { Model, ModelConfig } from '@/uvicore/orm/model';
 import { Section } from '@/models/section';
 
-export class Space extends Model<Space>() {
+
+export class Topic extends Model<Topic>() {
 
   id: number
   slug: string
   name: string
+  desc?: string
+  icon?: string
   order: number
-  sections: Section[]
+  section_id: number
+  section?: Section
 
   static _config: ModelConfig = {
     url: 'https://wiki-api-local.triglobal.io/api',
-    path: '/spaces',
+    path: '/topics',
   }
 
   public constructor() {
@@ -21,14 +25,11 @@ export class Space extends Model<Space>() {
     this.id = 0
     this.slug = 'asdf'
     this.name = 'asdf'
+    this.desc = 'asdf'
+    this.icon = 'asdf'
     this.order = 0
-    this.sections = []
-
+    this.section_id = 0
+    this.section = undefined
   }
-
-  // Overload example
-  // public static async get(): Promise<Space[]> {
-  //   return super.get();
-  // }
 
 }
