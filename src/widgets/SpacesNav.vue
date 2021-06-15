@@ -6,10 +6,10 @@
     </div>
     <div v-else-if="spaces.error"
       class="border-transparent text-red-600 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-      {{spaces.error.message}}
+      {{spaces.error}}
     </div>
     <div v-else class="inline-flex items-center">
-      <!-- <router-link to="/about">About</router-link> -->
+      <router-link to="/about">About</router-link>
       <PopoverGroup
         v-for="space in spaces.results" :key="space.id"
         class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-5 pt-1 border-b-2 text-sm font-medium"
@@ -17,7 +17,7 @@
 
         <Popover v-slot="{ open }" class="relativeXXXNO">
           <PopoverButton @click="opened == space.id ? opened = 0 : opened = space.id" :class="[open ? 'text-gray-900' : 'text-gray-500', 'group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500']">
-            <span>{{space.name}}</span>
+            <span>{{space.name2}}</span>
             <ChevronDownIcon :class="[open ? 'text-gray-600' : 'text-gray-400', 'ml-2 h-5 w-5 group-hover:text-gray-500']" aria-hidden="true" />
           </PopoverButton>
 
@@ -286,7 +286,6 @@ const callsToAction = [
 
 //import { spaceStore } from '@/models/space-old';
 
-import { useTask } from 'vue-concurrency';
 
 
 // const loadSpaces = async() => {
@@ -305,6 +304,7 @@ const api = axios.create({
 });
 
 import { Space } from '@/models/space';
+import { spacesStore } from '@/store/spaces';
 
 export default defineComponent({
   name: 'SpacesNav',
@@ -322,8 +322,19 @@ export default defineComponent({
 
   setup() {
 
-    // API Client ORM style queries
-    let spaces = Space.query().include(['sections.topics']).get();
+    // If spaces is a Pinia store
+    const spaces = spacesStore()
+    //spaces.loadSpaces();
+
+    // Uvicore API Client queries
+    //let spaces = Space.query().include(['sections.topics']).get();
+    Space.query().include(['sections.topics']).state(spaces).get();
+
+    // Hacked up manual GET examples (not query builder, raw)
+    //let spaces = Space.query().get('/1');
+    //let spaces = Space.query().get('?include=sections.topics');
+    // others will be .post({data...}), .put({data...}), .delete('/1') etc... pure raw passthrough
+    // could also add a .headers({asdf:asdf}) to tweak axios if needed etc...
 
 
 
@@ -378,6 +389,7 @@ export default defineComponent({
 
     onMounted(() => {
       console.log("Before Mount!");
+
 
       //spaces = Space.get6();
 

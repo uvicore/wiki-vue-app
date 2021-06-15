@@ -15,15 +15,21 @@ export class Space extends Model<Space>() {
     path: '/spaces',
   }
 
-  public constructor() {
+  // All API returns are instances of this object!
+  // This means we now have getters, setters and full methods on each row!
+  get name2(): string {
+    return this.name + '!'
+  }
 
+  public constructor({id, slug, name, order, sections}: Space) {
+    // Constructor using functional destructuring so I can pass in an object as params
+    // https://medium.com/@rileyhilliard/es6-destructuring-in-typescript-4c048a8e9e15
     super();
-    this.id = 0
-    this.slug = 'asdf'
-    this.name = 'asdf'
-    this.order = 0
-    this.sections = []
-
+    this.id = id
+    this.slug = slug
+    this.name = name
+    this.order = order
+    this.sections = sections
   }
 
   // Overload example

@@ -1,3 +1,4 @@
+import { vModelDynamic } from '@vue/runtime-dom';
 import { QueryBuilder } from './builder';
 
 
@@ -5,6 +6,12 @@ export interface ModelConfig {
   url?: string,
   path?: string,
 }
+
+// export interface ModelInterface<E> {
+//   _config: ModelConfig
+//   query(params?: string): QueryBuilder<E>
+// }
+
 
 // Why a wrapper function?
 // Because typescript does not handle generics on statics
@@ -20,6 +27,7 @@ export function Model<E>() {
     // public static list: E[] = [];
 
     public static query(): QueryBuilder<E> {
+      // @ts-ignore
       return new QueryBuilder<E>(this);
     }
 
@@ -113,9 +121,9 @@ export function Model<E>() {
     //   return null!
     // }
 
-    // public save(): void {
-
-    // }
+    public save(): string {
+      return "Save() here!"
+    }
   }
   return Model;
 }

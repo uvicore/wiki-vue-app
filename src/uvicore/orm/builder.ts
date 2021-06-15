@@ -5,32 +5,47 @@ import { Result, Results } from './results';
 
 
 export class QueryBuilder<E> {
+
   entity: E
+  params?: string
   config: ModelConfig
   api: AxiosInstance
 
   // Query builder
-  includes: string[] = []
+  _extraPath: string = ''
+  _state?: any = null
+  _includes?: string[]
 
-  public constructor(entity: any) {
+  public constructor(entity: E) {
     this.entity = entity;
+    // @ts-ignore
     this.config = entity._config;
+
     this.api = axios.create({
       baseURL: this.config.url,
     });
   }
 
+  public state(store: any) {
+    this._state = store
+    return this
+  }
+
   public include(includes: string[]): this {
-    this.includes = includes
+    this._includes = includes
     return this;
   }
 
-  private buildUrlQuery(extraPath: string = ''): string {
+  private buildUrlQuery(params?: string): string {
     let url: string = this.config.path || '';
-    url += extraPath
+    url += this._extraPath
 
-    if (this.includes) {
-      url += '?include=' + this.includes.join(',')
+    // If we passed in custom params from .query(params) use those instead.
+    if (params) return url + params;
+
+    // Full URL parameter builder
+    if (this._includes) {
+      url += '?include=' + this._includes.join(',')
     }
     return url;
   }
@@ -40,7 +55,8 @@ export class QueryBuilder<E> {
     let result = ref<Result<E>>(new Result());
 
     // Build URL parameters from query builder
-    const builderPath = this.buildUrlQuery('/' + id);
+    this._extraPath = '/' + id
+    const builderPath = this.buildUrlQuery();
     console.log(builderPath);
 
     // Query Uvicore API
@@ -57,19 +73,37 @@ export class QueryBuilder<E> {
     return result
   }
 
-  public get(): Ref<UnwrapRef<Results<E>>> {
+  public get(params?: string): Ref<UnwrapRef<Results<E>>> {
     // Create empty results to send back immediately before axios call runs
     let results = ref<Results<E>>(new Results());
 
     // Build URL parameters from query builder
-    const builderPath = this.buildUrlQuery();
+    const builderPath = this.buildUrlQuery(params);
     console.log(builderPath);
 
     this.api.get(builderPath).then((res) => {
       setTimeout(() => { // Fake timer for loading screens
         results.value.loading = false
+
+        // If custom params on .get() could return just one result (not array)
+        // Convert it to array in this case
+        if (!Array.isArray(res.data)) res.data = [res.data]
+
         results.value.count = res.data.length
-        results.value.results= res.data
+        if (res.data.length > 0) {
+          console.log('hi')
+          const keys = Object.keys(res.data[0]);
+          for (let data of res.data) {
+            // Map result into Model entity (instance)
+            // @ts-ignore
+            const entity = new this.entity(data);
+            results.value.results.push(entity)
+          }
+        }
+
+        // If .store() save to store state
+        if (this._state) this._state.set(results);
+
       }, 1000);
     }).catch((error) => {
       results.value.error = error

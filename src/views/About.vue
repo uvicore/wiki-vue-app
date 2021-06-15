@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <h1>This is an about page</h1>
-    Counter State: {{ counterState.count }}
+    <div @click="incrementCount">Counter State: {{ counter.count }}</div>
   </div>
 </template>
 
@@ -13,8 +13,14 @@ import { counterStore } from "@/store/counter"
 
 export default defineComponent({
   setup() {
+    const counter = counterStore()
+
+    function incrementCount() {
+      counter.incrementCount()
+    }
+
     return {
-      counterState: counterStore.getState()
+      counter, incrementCount,
     }
   }
 

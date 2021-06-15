@@ -41,6 +41,7 @@ import { ref, defineComponent, onMounted } from 'vue'
 //import { useStore } from '@/store'
 //import { counterStore } from '@/store/counter'
 import { counterStore } from '@/store';
+import { spacesStore } from '@/store';
 //import { spaceStore } from '@/models/space';
 import { Space } from '@/models';
 
@@ -58,6 +59,7 @@ export default defineComponent({
   setup(props) {
 
     const counter = counterStore();
+    const spaces = spacesStore();
 
 
     //const store = useStore()
@@ -69,7 +71,10 @@ export default defineComponent({
     // return { count }
 
     function incrementCount() {
+      console.log('click counter');
       counter.incrementCount();
+      spaces.tweak();
+
 
     }
 
