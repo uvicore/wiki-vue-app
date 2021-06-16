@@ -6,11 +6,14 @@
     </span>
   </a> -->
 
-  <div
+  <div v-if="posts.loading">
+    <Loading msg="loading topic posts..." />
+  </div>
+  <div v-else
     v-for="post in posts.results" :key="post.id"
     class="text-gray-900 hover:text-gray-900 hover:bg-gray-50 group rounded-md px-3 py-2 flex items-center text-sm font-medium'"
   >
-    <router-link :to="slug(post)">
+    <router-link :to="post.slug_full">
       {{post.title}}
     </router-link>
   </div>
@@ -22,44 +25,60 @@ import { defineComponent, ref, watch } from 'vue'
 import { useRoute } from 'vue-router';
 import { Post } from '@/models';
 import { Results } from '@/uvicore/orm/results';
+import Loading from '@/uvicore/components/loading/Loading1.vue'
 
 export default defineComponent({
   name: 'PostsNav',
 
+  components: {
+    Loading,
+  },
+
   setup() {
     // Get current route
     const route = useRoute()
-    const path = route.path;
-
-    function slug(post: Post): string {
-      return post.topic.section.space.slug + post.topic.section.slug + post.topic.slug + '/' + post.slug
-    }
 
     // Create an empty Post ref outside the watch
     let posts = ref<Results<Post>>(new Results());
 
-      // Watch for route path changes, and also run "immediate"
-      // FIXME, should be able to check OLD and NEW, if has not changed, DON't re-run
-      // or it causes the side bar to "flash"
-    watch(() => route.path, (path) => {
-      const path_split = path.split('/');
-      const space_slug = '/' + path_split[1];
-      const section_slug = '/' + path_split[2];
-      const topic_slug = '/' + path_split[3];
-      const post_slug = path_split[4];
+    // Watch for route path changes, and also run "immediate"
+    watch(() => route.path, (path, prevPath) => {
+      const paths = Post.explode_path(path);
+      const prevPaths = Post.explode_path(prevPath!);
 
+      // Not on a /space/section/topic path, don't run query
+      if (!paths.topic) {
+        posts.value.reset()
+        posts.value.loading = false
+        return
+      }
+
+      console.log('PATH:', path);
+      console.log('PATHS:', paths);
+      console.log('PREV PATH:', prevPath);
+      console.log('PREV PATHS:', prevPaths);
+
+      // Chech only space/section/topic (not /post) for changes, if no changes, don't re-run query
+      if (paths.space + paths.section + paths.topic == prevPaths.space + prevPaths.section + prevPaths.topic) {
+        return
+      }
+
+      // Notice we are passing in our existing ref not opting to build a new one
+      // If we returned a new ref, it would be a new different ref than the one
+      // we already returned.  You must always keep the same ref instance.
       Post.query()
         .include(['topic.section.space'])
-        .where('topic.slug', '=', topic_slug)
-        .where('topic.section.slug', '=', section_slug)
-        .where('topic.section.space.slug', '=', space_slug)
+        .where('topic.slug', '=', paths.topic)
+        .where('topic.section.slug', '=', paths.section)
+        .where('topic.section.space.slug', '=', paths.space)
         .ref(posts)
         .get();
     }, {immediate: true})
 
+
+    // Setup return
     return {
       posts,
-      slug,
     }
 
   },

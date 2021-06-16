@@ -3,12 +3,14 @@ import { Model, ModelConfig } from '@/uvicore/orm/model';
 import { Section } from '@/models/section';
 
 export class Space extends Model<Space>() {
-
+  // API fields
   id: number
   slug: string
   name: string
   order: number
-  sections: Section[]
+
+  // Relations
+  sections: Section[]|null
 
   static _config: ModelConfig = {
     url: 'https://wiki-api-local.triglobal.io/api',
@@ -31,7 +33,7 @@ export class Space extends Model<Space>() {
     this.order = order
     this.sections = null!
 
-    // Relations must be instances of the relations class
+    // Convert relations into actual model class instances
     if (sections && sections.length > 0) {
       this.sections = []
       for (let section of sections) {
@@ -39,7 +41,6 @@ export class Space extends Model<Space>() {
         this.sections.push(new Section(section))
       }
     }
-    console.log('SPACES: ', this);
   }
 
   // Overload example

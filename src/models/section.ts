@@ -5,35 +5,45 @@ import { Topic } from '@/models/topic';
 
 
 export class Section extends Model<Section>() {
-
+  // API fields
   id: number
   slug: string
-  slug_full: string
   name: string
-  icon?: string
+  icon: string|null
   order: number
   space_id: number
-  space: Space
-  topics: Topic[]
+
+  // Computed
+  slug_full: string
+
+  // Relations
+  space: Space|null
+  topics: Topic[]|null
 
   static _config: ModelConfig = {
     url: 'https://wiki-api-local.triglobal.io/api',
     path: '/sections',
   }
 
-  public constructor({id, slug, slug_full, name, icon, order, space_id, space, topics}: Section) {
+  public constructor({
+    id, slug, name, icon, order, space_id,
+    slug_full,
+    space, topics
+  }: Section) {
     super();
     this.id = id
     this.slug = slug
-    this.slug_full = slug_full
     this.name = name
     this.icon = icon
     this.order = order
     this.space_id = space_id
-    this.space = space
-    this.topics = null!
 
-    // Relations must be instances of the relations class
+    this.slug_full = slug_full
+
+    this.space = null
+    this.topics = null
+
+    // Convert relations into actual model class instances
     if (topics && topics.length > 0) {
       this.topics = []
       for (let topic of topics) {
@@ -41,6 +51,8 @@ export class Section extends Model<Section>() {
         this.topics.push(new Topic(topic));
       }
     }
+
+    if (space) this.space = new Space(space)
   }
 
 }

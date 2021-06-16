@@ -1,6 +1,7 @@
 <template>
   <div class="post">
-    <h1 class="text-xs">{{route.path}}</h1>
+    <h1 class="text-xs">Route Path: {{route.path}}</h1>
+    <h1 class="text-xs">Computed Full Slug: {{post.result.slug_full}}</h1>
   </div>
 
   <div v-if="post.loading">
@@ -36,34 +37,22 @@ export default defineComponent({
     const route = useRoute()
     const path = route.path;
 
-    function slug(post: Post): string {
-      return post.topic.section.space.slug + post.topic.section.slug + post.topic.slug + '/' + post.slug
-    }
-
     // Create an empty Post ref outside the watch
     let post = ref<Results<Post>>(new Results());
 
     // Watch for route path changes, and also run "immediate"
     watch(() => route.path, (path) => {
-      const path_split = path.split('/');
-      console.log(path_split);
-      const space_slug = '/' + path_split[1];
-      const section_slug = '/' + path_split[2];
-      const topic_slug = '/' + path_split[3];
-      const post_slug = path_split[4];
-      console.log('PATH:', path)
-      console.log('PATH_SPLIT:', path_split)
+      const paths = Post.explode_path(path);
 
       // Notice we are passing in our existing ref not opting to build a new one
       // If we returned a new ref, it would be a new different ref than the one
       // we already returned.  You must always keep the same ref instance.
       Post.query()
         .include(['topic.section.space'])
-        .where('slug', '=', post_slug)
-        .where('topic.slug', '=', topic_slug)
-        .where('topic.section.slug', '=', section_slug)
-        .where('topic.section.space.slug', '=', space_slug)
-        // Use existing outside ref
+        .where('slug', '=', paths.post)
+        .where('topic.slug', '=', paths.topic)
+        .where('topic.section.slug', '=', paths.section)
+        .where('topic.section.space.slug', '=', paths.space)
         .ref(post)
         .find()
       console.log('POST:', post.value);
@@ -73,10 +62,9 @@ export default defineComponent({
       console.log('Posts mounted')
     })
 
-
+    // Setup return
     return {
       post,
-      slug,
       route,
     }
   }

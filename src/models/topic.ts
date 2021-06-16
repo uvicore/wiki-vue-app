@@ -4,16 +4,20 @@ import { Section } from '@/models/section';
 
 
 export class Topic extends Model<Topic>() {
-
+  // API Fields
   id: number
   slug: string
-  slug_full: string
   name: string
-  desc?: string
-  icon?: string
+  desc: string|null
+  icon: string|null
   order: number
   section_id: number
-  section: Section
+
+  // Computed
+  slug_full: string
+
+  // Relations
+  section: Section|null
 
   static _config: ModelConfig = {
     url: 'https://wiki-api-local.triglobal.io/api',
@@ -24,13 +28,19 @@ export class Topic extends Model<Topic>() {
     super();
     this.id = id
     this.slug = slug
-    this.slug_full = slug_full
+
     this.name = name
     this.desc = desc
     this.icon = icon
     this.order = order
     this.section_id = section_id
-    this.section = section
+
+    this.slug_full = slug_full
+
+    this.section = null
+
+    // Convert relations into actual model class instances
+    if (section) this.section = new Section(section)
   }
 
 }

@@ -3,8 +3,8 @@ import { QueryBuilder } from './builder';
 
 
 export interface ModelConfig {
-  url?: string,
-  path?: string,
+  url: string,
+  path: string,
 }
 
 // export interface ModelInterface<E> {
@@ -21,7 +21,10 @@ export interface ModelConfig {
 export function Model<E>() {
   abstract class Model {
 
-    public static _config: ModelConfig = {}
+    public static _config: ModelConfig = {
+      url: '',
+      path: ''
+    }
 
     // /* static methods */
     // public static list: E[] = [];
