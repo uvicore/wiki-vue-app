@@ -43,7 +43,7 @@
 
                             <router-link
                               @click="opened = 0"
-                              :to="space.slug + section.slug + topic.slug"
+                              :to="topic.slug_full"
                               class="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50">
 
                               <component :is="IconsOutline[topic.icon]" class="flex-shrink-0 h-6 w-6 text-indigo-600" aria-hidden="true" />
@@ -303,7 +303,7 @@ const api = axios.create({
   baseURL: "https://wiki-api-local.triglobal.io/api",
 });
 
-import { Space } from '@/models/space';
+import { Space } from '@/models';
 import { spacesStore } from '@/store/spaces';
 
 export default defineComponent({

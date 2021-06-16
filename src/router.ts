@@ -23,8 +23,17 @@ const routes: Array<RouteRecordRaw> = [
     // }
 
   },
+
+  // FIXME still need '/:space/:section/:topic',
+  // maybe goto landing page, or eventually display some topics "desc?"
   {
     path: '/:space/:section/:topic',
+    name: 'Section',
+    component: Home,
+  },
+
+  {
+    path: '/:space/:section/:topic/:post',
     name: 'Post',
     component: Post,
   }
@@ -33,7 +42,11 @@ const routes: Array<RouteRecordRaw> = [
 export const Router = createRouter({
   //history: createWebHistory(process.env.BASE_URL),
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    // Always scroll to top
+    return { top: 0 }
+  },
 })
 
 //auth.useRouter(router);

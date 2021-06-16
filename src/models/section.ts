@@ -8,11 +8,12 @@ export class Section extends Model<Section>() {
 
   id: number
   slug: string
+  slug_full: string
   name: string
   icon?: string
   order: number
   space_id: number
-  space?: Space
+  space: Space
   topics: Topic[]
 
   static _config: ModelConfig = {
@@ -20,17 +21,26 @@ export class Section extends Model<Section>() {
     path: '/sections',
   }
 
-  public constructor() {
-
+  public constructor({id, slug, slug_full, name, icon, order, space_id, space, topics}: Section) {
     super();
-    this.id = 0
-    this.slug = 'asdf'
-    this.name = 'asdf'
-    this.icon = 'asdf'
-    this.order = 0
-    this.space_id = 0
-    this.space = undefined
-    this.topics = []
+    this.id = id
+    this.slug = slug
+    this.slug_full = slug_full
+    this.name = name
+    this.icon = icon
+    this.order = order
+    this.space_id = space_id
+    this.space = space
+    this.topics = null!
+
+    // Relations must be instances of the relations class
+    if (topics && topics.length > 0) {
+      this.topics = []
+      for (let topic of topics) {
+        topic.slug_full = this.slug_full + topic.slug
+        this.topics.push(new Topic(topic));
+      }
+    }
   }
 
 }

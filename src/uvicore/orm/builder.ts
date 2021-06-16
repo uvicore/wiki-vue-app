@@ -5,16 +5,17 @@ import { Result, Results } from './results';
 
 
 export class QueryBuilder<E> {
-
   entity: E
   params?: string
   config: ModelConfig
   api: AxiosInstance
 
-  // Query builder
+  // Query builder properties
   _extraPath: string = ''
-  _state?: any = null
+  _state?: any
   _includes?: string[]
+  _where?: any
+  _ref?: Ref<UnwrapRef<Results<E>>>
 
   public constructor(entity: E) {
     this.entity = entity;
@@ -36,46 +37,99 @@ export class QueryBuilder<E> {
     return this;
   }
 
+  public where(field: string, operator: string, value: any): this {
+    if (!this._where) this._where = {}
+    this._where[field] = [operator, value]
+    return this;
+  }
+
+  public ref(ref: Ref<UnwrapRef<Results<E>>>): this {
+    this._ref = ref
+    return this;
+  }
+
   private buildUrlQuery(params?: string): string {
-    let url: string = this.config.path || '';
-    url += this._extraPath
+    let url: string = ''
 
     // If we passed in custom params from .query(params) use those instead.
-    if (params) return url + params;
+    if (params) return (this.config.path || '') + this._extraPath + params;
 
-    // Full URL parameter builder
+    // Includes
     if (this._includes) {
-      url += '?include=' + this._includes.join(',')
+      url += '&include=' + this._includes.join(',')
     }
+
+    // Wheres AND
+    if (this._where) {
+      url += '&where=' + JSON.stringify(this._where)
+    }
+
+    // Set first char to ?
+    url = url.replace(url.charAt(0), '?');
+
+    // Prefix with proper paths
+    url = (this.config.path || '') + this._extraPath + url;
+
+    // Return url
     return url;
   }
 
-  public find(id: string|number): Ref<UnwrapRef<Result<E>>> {
+  public find(id?: string|number): Ref<UnwrapRef<Results<E>>> {
     // Create empty results to send back immediately before axios call runs
-    let result = ref<Result<E>>(new Result());
+    //let result = ref<Results<E>>(new Results());
+
+    if (this._ref) {
+      // Passing in an existing ref for us to modify
+      var results = this._ref;
+
+      // Ensure ref is empty before query runs or .push will keep appending
+      results.value.reset();
+    } else {
+      // No outside ref specified, create a new ref for these results
+      var results = ref<Results<E>>(new Results());
+    }
+
+    // If id, we are finding one record by pk
+    if (id) {
+      this._extraPath = '/' + id
+    }
 
     // Build URL parameters from query builder
-    this._extraPath = '/' + id
     const builderPath = this.buildUrlQuery();
     console.log(builderPath);
 
     // Query Uvicore API
     this.api.get(builderPath).then((res) => {
-      result.value.loading = false
-      result.value.result = res.data
+      results.value.loading = false
+      let data = res.data;
+      if (Array.isArray(data)) data = data[0]
+      // @ts-ignore
+      const record = new this.entity(data)
+      results.value.result = record
     }).catch((error) => {
-      result.value.error = error
-      result.value.loading = false
+      results.value.error = error
+      results.value.loading = false
       console.error(error);
     });
 
     // Return empty Ref immediately, ref will update with api results are returned
-    return result
+    return results
   }
 
   public get(params?: string): Ref<UnwrapRef<Results<E>>> {
-    // Create empty results to send back immediately before axios call runs
-    let results = ref<Results<E>>(new Results());
+    if (this._ref) {
+      // Passing in an existing ref for us to modify
+      var results = this._ref;
+
+      // Ensure ref is empty before query runs or .push will keep appending
+      results.value.reset();
+    } else {
+      // No outside ref specified, create a new ref for these results
+      var results = ref<Results<E>>(new Results());
+    }
+
+    // Init blank results
+    results.value.results = []
 
     // Build URL parameters from query builder
     const builderPath = this.buildUrlQuery(params);
@@ -96,15 +150,17 @@ export class QueryBuilder<E> {
           for (let data of res.data) {
             // Map result into Model entity (instance)
             // @ts-ignore
-            const entity = new this.entity(data);
-            results.value.results.push(entity)
+            const record = new this.entity(data);
+
+            // @ts-ignore
+            results.value.results.push(record)
           }
         }
 
         // If .store() save to store state
         if (this._state) this._state.set(results);
 
-      }, 1000);
+      }, 500);
     }).catch((error) => {
       results.value.error = error
       results.value.loading = false

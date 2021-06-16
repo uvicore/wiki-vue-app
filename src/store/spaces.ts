@@ -39,8 +39,9 @@ export const spacesStore = defineStore({
 
     // Hack example to tweak a name, jsut to test reactivity from other components
     tweak() {
+      //this.results[0].name = 'xx';
       this.results[0].name += '?';
-      this.results[0].sections[0].name += '?'
+      this.results[0].sections![0].name += '?'
     }
 
   },

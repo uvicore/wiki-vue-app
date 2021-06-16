@@ -48,12 +48,7 @@
     </template>
 
     <template v-slot:body-sidenav>
-      <a v-for="item in subNavigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-gray-50 text-indigo-600 hover:bg-white' : 'text-gray-900 hover:text-gray-900 hover:bg-gray-50', 'group rounded-md px-3 py-2 flex items-center text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">
-        <component :is="item.icon" :class="[item.current ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500', 'flex-shrink-0 -ml-1 mr-3 h-6 w-6']" aria-hidden="true" />
-        <span class="truncate">
-          {{ item.name }}
-        </span>
-      </a>
+      <PostsNav/>
     </template>
 
   </Layout>
@@ -71,6 +66,7 @@ import Layout from '@/uvicore/layouts/basic/Layout.vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import SpacesNav from '@/widgets/SpacesNav.vue'
 import SearchBox from '@/widgets/SearchBox.vue'
+import PostsNav from '@/widgets/PostsNav.vue'
 import {
   BellIcon,
   CogIcon,
@@ -82,14 +78,6 @@ import {
   XIcon,
 } from '@heroicons/vue/outline'
 
-const subNavigation = [
-  { name: 'Profile', href: '#', icon: UserCircleIcon, current: false },
-  { name: 'Account', href: '#', icon: CogIcon, current: false },
-  { name: 'Password', href: '#', icon: KeyIcon, current: false },
-  { name: 'Notifications', href: '#', icon: BellIcon, current: false },
-  { name: 'Plan & Billing', href: '#', icon: CreditCardIcon, current: true },
-  { name: 'Integrations', href: '#', icon: ViewGridAddIcon, current: false },
-]
 
 export default defineComponent({
   name: 'App',
@@ -100,6 +88,7 @@ export default defineComponent({
     Layout,
     SpacesNav,
     SearchBox,
+    PostsNav,
 
     // Headless UI Components
     Menu,
@@ -116,7 +105,6 @@ export default defineComponent({
 
   setup() {
     return {
-      subNavigation,
     }
   },
 

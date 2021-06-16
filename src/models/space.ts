@@ -29,7 +29,17 @@ export class Space extends Model<Space>() {
     this.slug = slug
     this.name = name
     this.order = order
-    this.sections = sections
+    this.sections = null!
+
+    // Relations must be instances of the relations class
+    if (sections && sections.length > 0) {
+      this.sections = []
+      for (let section of sections) {
+        section.slug_full = this.slug + section.slug
+        this.sections.push(new Section(section))
+      }
+    }
+    console.log('SPACES: ', this);
   }
 
   // Overload example

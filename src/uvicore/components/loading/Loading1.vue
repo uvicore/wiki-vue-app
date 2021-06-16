@@ -1,11 +1,11 @@
 <template>
-  <div class="relative flex justify-center items-center h-screen">
+  <div class="inline-flex">
     <div
-      class="inline-block ease duration-300 w-5 h-5 mx-2"
+      class="duration-300 w-5 h-5 mx-2"
       :class="spinClass"
     ></div>
   </div>
-  <span class="animate-pulse" :class="msgColor">{{ msg }}</span>
+  <span class="animate-pulse px-1 text-sm font-medium" :class="msgColor">{{ msg }}</span>
 </template>
 
 <script lang="ts">
