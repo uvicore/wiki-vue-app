@@ -1,36 +1,45 @@
+// Vue
 import App from './App.vue';
 import { createApp } from 'vue';
-//import { store, key } from './store';
+
+// Plugins
 import { Router } from './router';
-
-import './assets/css/app.css';
-
-//import auth from '@/services/auth';
-
-import { config } from '@/config';
+import { createPinia } from 'pinia';
 import { Auth } from '@/uvicore/auth';
 import { Config } from '@/uvicore/config';
-import { createPinia } from 'pinia';
 
-// Create main vue application
+// Assets
+import './assets/css/app.css';
+
+// Config file
+import { config } from '@/config';
+
+
+// Application Creation
 const app = createApp(App);
 
-// Add vue plugins
+// Configuration plugin
+// Accessible in our globalProperties using this.$config
+// But also as an injection token called 'config' since setup() cannot access 'this.'
+
 app.use(Config, config);
+
+// Pinia Store (a vuex replacement)
 app.use(createPinia());
+
+// Authentication and authorization plugin
 app.use(Auth, {
   router: Router,
   config: config.auth
 });
+
+// Vue Route plugin
 app.use(Router);
 //app.use(store, key);
 
-// Mount app
+
+// Application Mount
 app.mount('#app');
-
-console.log(app.config);
-
-
 
 
 

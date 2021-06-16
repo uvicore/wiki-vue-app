@@ -40,8 +40,8 @@
 import { ref, defineComponent, onMounted } from 'vue'
 //import { useStore } from '@/store'
 //import { counterStore } from '@/store/counter'
-import { counterStore } from '@/store';
-import { spacesStore } from '@/store';
+import { useCounterStore } from '@/store';
+import { useSpaceStore } from '@/store';
 //import { spaceStore } from '@/models/space';
 import { Space } from '@/models';
 
@@ -58,8 +58,8 @@ export default defineComponent({
 
   setup(props) {
 
-    const counter = counterStore();
-    const spaces = spacesStore();
+    const counter = useCounterStore();
+    const spaces = useSpaceStore();
 
 
     //const store = useStore()

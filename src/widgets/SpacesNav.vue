@@ -46,7 +46,7 @@
                               :to="topic.slug_full"
                               class="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50">
 
-                              <component :is="IconsOutline[topic.icon]" class="flex-shrink-0 h-6 w-6 text-indigo-600" aria-hidden="true" />
+                              <!-- <component :is="IconsOutline[topic.icon]" class="flex-shrink-0 h-6 w-6 text-indigo-600" aria-hidden="true" /> -->
 
                               <div class="ml-4">
                                 <p class="text-base font-medium text-gray-900">
@@ -303,8 +303,8 @@ const api = axios.create({
   baseURL: "https://wiki-api-local.triglobal.io/api",
 });
 
-import { Space } from '@/models';
-import { spacesStore } from '@/store/spaces';
+import { useSpaceModel } from '@/models/space';
+import { useSpaceStore } from '@/store/space';
 
 export default defineComponent({
   name: 'SpacesNav',
@@ -321,20 +321,25 @@ export default defineComponent({
   },
 
   setup() {
+    // Get models by factory
+    const Space = useSpaceModel()
 
-    // If spaces is a Pinia store
-    const spaces = spacesStore()
+    // In this example, we are storing our spaces in state using Pinia store
+    // The spaces store returns the exact same Results object as our API client
+    // does.  We can also use our API client to save result right back to the store
+    // instead of returning them as a ref!
+    const spaces = useSpaceStore()
+
+    // If we wanted to skip the API client and call an "action" on our store
     //spaces.loadSpaces();
 
-    // Uvicore API Client queries
-    //let spaces = Space.query().include(['sections.topics']).get();
+    // But using the API client is more powerful.  We can still use the API client
+    // but have the results set to our space store using .state(spaces)!
     Space.query().include(['sections.topics']).state(spaces).get();
 
-    // Hacked up manual GET examples (not query builder, raw)
-    //let spaces = Space.query().get('/1');
-    //let spaces = Space.query().get('?include=sections.topics');
-    // others will be .post({data...}), .put({data...}), .delete('/1') etc... pure raw passthrough
-    // could also add a .headers({asdf:asdf}) to tweak axios if needed etc...
+    // If we didn't have a store, we could return the result as a reactive ref
+    //let spaces = Space.query().include(['sections.topics']).get();
+
 
 
 

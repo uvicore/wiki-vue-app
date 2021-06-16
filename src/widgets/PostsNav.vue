@@ -21,9 +21,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, ref, watch, inject } from 'vue'
 import { useRoute } from 'vue-router';
-import { Post } from '@/models';
+import { usePostModel, PostModel } from '@/models/post';
 import { Results } from '@/uvicore/orm/results';
 import Loading from '@/uvicore/components/loading/Loading1.vue'
 
@@ -38,8 +38,11 @@ export default defineComponent({
     // Get current route
     const route = useRoute()
 
+    // Get models by factory
+    const Post = usePostModel()
+
     // Create an empty Post ref outside the watch
-    let posts = ref<Results<Post>>(new Results());
+    let posts = ref<Results<PostModel>>(new Results());
 
     // Watch for route path changes, and also run "immediate"
     watch(() => route.path, (path, prevPath) => {
@@ -53,12 +56,12 @@ export default defineComponent({
         return
       }
 
-      console.log('PATH:', path);
-      console.log('PATHS:', paths);
-      console.log('PREV PATH:', prevPath);
-      console.log('PREV PATHS:', prevPaths);
+      // console.log('PATH:', path);
+      // console.log('PATHS:', paths);
+      // console.log('PREV PATH:', prevPath);
+      // console.log('PREV PATHS:', prevPaths);
 
-      // Chech only space/section/topic (not /post) for changes, if no changes, don't re-run query
+      // Check only space/section/topic (not /post) for changes, if no changes, don't re-run query
       if (paths.space + paths.section + paths.topic == prevPaths.space + prevPaths.section + prevPaths.topic) {
         return
       }
@@ -74,7 +77,6 @@ export default defineComponent({
         .ref(posts)
         .get();
     }, {immediate: true})
-
 
     // Setup return
     return {

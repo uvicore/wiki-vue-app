@@ -1,38 +1,58 @@
 import { vModelDynamic } from '@vue/runtime-dom';
 import { QueryBuilder } from './builder';
+import { inject } from 'vue';
 
-
+/**
+ * Model configuration interface
+ */
 export interface ModelConfig {
-  url: string,
+  connection: string,
   path: string,
 }
 
-// export interface ModelInterface<E> {
-//   _config: ModelConfig
-//   query(params?: string): QueryBuilder<E>
-// }
-
-
-// Why a wrapper function?
-// Because typescript does not handle generics on statics
-// Until an instance of the class (or an instance of a subclass) is constructed, you don't actually have a type T
-// https://github.com/microsoft/TypeScript/issues/32211
-// https://stackoverflow.com/questions/52518125/workaround-for-accessing-class-type-arguments-in-static-method-in-typescript
-export function Model<E>() {
+/**
+ * Uvicore ORM style API client Model base class
+ * @returns Model
+ */
+export function Model<E>(model: any) {
   abstract class Model {
+    config: any
+
+
+    // Why a wrapper function?
+    // Because typescript does not handle generics on statics
+    // Until an instance of the class (or an instance of a subclass) is constructed, you don't actually have a type T
+    // https://github.com/microsoft/TypeScript/issues/32211
+    // https://stackoverflow.com/questions/52518125/workaround-for-accessing-class-type-arguments-in-static-method-in-typescript
 
     public static _config: ModelConfig = {
-      url: '',
-      path: ''
+      connection: '',
+      path: '',
+    }
+
+    public constructor(config: any) {
+      this.config = config
     }
 
     // /* static methods */
     // public static list: E[] = [];
 
-    public static query(): QueryBuilder<E> {
-      // @ts-ignore
-      return new QueryBuilder<E>(this);
+
+    // public static query2 = (): QueryBuilder<E> => {
+    //   let config: any = inject('config')
+    //   console.log('QB2 query()', config)
+    //   return new QueryBuilder<E>(this);
+    // }
+
+
+    public query(): QueryBuilder<E> {
+      return new QueryBuilder<E>(model, this.config);
     }
+
+    // public static query(): QueryBuilder<E> {
+    //   //console.log(config.app)
+    //   return new QueryBuilder<E>(this);
+    // }
 
     // public static async getX(): Promise<E[]> {
     //   return api.get('/spaces?include=sections.topics');
@@ -125,6 +145,7 @@ export function Model<E>() {
     // }
 
     public save(): string {
+      console.log("MODEL SAVE() HERE");
       return "Save() here!"
     }
   }

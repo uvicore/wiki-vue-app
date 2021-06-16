@@ -1,20 +1,8 @@
-// export class Result<E> {
-//   public loading: boolean = true
-//   public error: any = null
-//   public result: E = {} as E
-
-//   public get ready(): boolean {
-//     return !this.loading;
-//   }
-
-//   public reset(): void {
-//     // Clear a result, while keeping the same ref
-//     this.loading = true
-//     this.error = null
-//     this.result = {} as E
-//   }
-// }
-
+/**
+ * ORM style API Client Results class.
+ * Results from API are not returned directly but wrapped in this Result
+ * class which provides additional metadata including loading, error and reset.
+ */
 export class Results<E> {
   public loading: boolean = true
   public error: any = null
@@ -27,7 +15,7 @@ export class Results<E> {
   }
 
   public reset(): void {
-    // Clear a result, while keeping the same ref
+    // Clear result while keeping the same ref for reactive consistency
     this.loading = true
     this.error = null
     this.count = 0

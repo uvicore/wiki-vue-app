@@ -1,10 +1,12 @@
 import axios from 'axios';
 import { Model, ModelConfig } from '@/uvicore/orm/model';
-import { Space } from '@/models/space';
-import { Topic } from '@/models/topic';
+import { SpaceModel } from '@/models/space';
+import { TopicModel } from '@/models/topic';
+import { inject } from 'vue';
 
 
-export class Section extends Model<Section>() {
+//export class Section extends Model<Section>() {
+export class SectionModel {
   // API fields
   id: number
   slug: string
@@ -17,11 +19,11 @@ export class Section extends Model<Section>() {
   slug_full: string
 
   // Relations
-  space: Space|null
-  topics: Topic[]|null
+  space: SpaceModel|null
+  topics: TopicModel[]|null
 
   static _config: ModelConfig = {
-    url: 'https://wiki-api-local.triglobal.io/api',
+    connection: 'wiki',
     path: '/sections',
   }
 
@@ -29,8 +31,8 @@ export class Section extends Model<Section>() {
     id, slug, name, icon, order, space_id,
     slug_full,
     space, topics
-  }: Section) {
-    super();
+  }: SectionModel) {
+    //super();
     this.id = id
     this.slug = slug
     this.name = name
@@ -48,11 +50,16 @@ export class Section extends Model<Section>() {
       this.topics = []
       for (let topic of topics) {
         topic.slug_full = this.slug_full + topic.slug
-        this.topics.push(new Topic(topic));
+        this.topics.push(new TopicModel(topic));
       }
     }
 
-    if (space) this.space = new Space(space)
+    if (space) this.space = new SpaceModel(space)
   }
+}
 
+
+export const usePostModel = () => {
+  class ModelFactory extends Model<SectionModel>(SectionModel) {}
+  return new ModelFactory(inject('config'))
 }

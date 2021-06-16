@@ -3,6 +3,23 @@ import { OidcAuth } from '@/uvicore/auth/oidc';
 
 
 export const config = {
+  // ---------------------------------------------------------------------------
+  // App configuration
+  // ---------------------------------------------------------------------------
+  app: {
+    // APIs using connection string naming
+    apis: {
+      wiki: {
+        url: 'https://wiki-api-local.triglobal.io/api',
+        token: 'some-token-name-so-we-can-handle-multiple-jws-token'
+      },
+    },
+  },
+
+
+  // ---------------------------------------------------------------------------
+  // Auth plugin configuration
+  // ---------------------------------------------------------------------------
   auth: {
     driver: 'oidc',
     module: OidcAuth,
@@ -14,6 +31,7 @@ export const config = {
       authUrl: 'https://auth-local.triglobal.io',
     },
   }
+
 }
 
 

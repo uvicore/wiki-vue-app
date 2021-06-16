@@ -18,9 +18,9 @@
 </template>
 
 <script lang="ts">
-import { ref, Ref, UnwrapRef, defineComponent, onMounted, watch } from 'vue'
+import { ref, Ref, UnwrapRef, defineComponent, onMounted, watch, inject } from 'vue'
 import { useRoute } from 'vue-router'
-import { Post } from '@/models'
+import { usePostModel, PostModel } from '@/models/post'
 import Loading from '@/uvicore/components/loading/Loading1.vue'
 import { Results } from '@/uvicore/orm/results'
 
@@ -32,13 +32,17 @@ export default defineComponent({
     Loading
   },
 
+  inject: ['config'],
+
   setup() {
     // Get current route
     const route = useRoute()
-    const path = route.path;
+
+    // Get models by factory
+    const Post = usePostModel()
 
     // Create an empty Post ref outside the watch
-    let post = ref<Results<Post>>(new Results());
+    let post = ref<Results<PostModel>>(new Results());
 
     // Watch for route path changes, and also run "immediate"
     watch(() => route.path, (path) => {
@@ -67,7 +71,7 @@ export default defineComponent({
       post,
       route,
     }
-  }
+  },
 
 })
 

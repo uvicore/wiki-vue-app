@@ -8,12 +8,12 @@
 <script lang="ts">
 
 import { defineComponent } from 'vue'
-import { counterStore } from "@/store/counter"
+import { useCounterStore } from "@/store/counter"
 
 
 export default defineComponent({
   setup() {
-    const counter = counterStore()
+    const counter = useCounterStore()
 
     function incrementCount() {
       counter.incrementCount()

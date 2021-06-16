@@ -1,2 +1,2 @@
-export { counterStore } from './counter';
-export { spacesStore } from './spaces';
+export { useCounterStore } from './counter';
+export { useSpaceStore } from './space';

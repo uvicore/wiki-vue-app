@@ -1,8 +1,11 @@
 import axios from 'axios';
+import { inject } from 'vue';
+import { SectionModel } from '@/models/section';
 import { Model, ModelConfig } from '@/uvicore/orm/model';
-import { Section } from '@/models/section';
 
-export class Space extends Model<Space>() {
+
+//export class Space extends Model<Space>() {
+export class SpaceModel {
   // API fields
   id: number
   slug: string
@@ -10,10 +13,10 @@ export class Space extends Model<Space>() {
   order: number
 
   // Relations
-  sections: Section[]|null
+  sections: SectionModel[]|null
 
   static _config: ModelConfig = {
-    url: 'https://wiki-api-local.triglobal.io/api',
+    connection: 'wiki',
     path: '/spaces',
   }
 
@@ -23,22 +26,23 @@ export class Space extends Model<Space>() {
     return this.name + '!'
   }
 
-  public constructor({id, slug, name, order, sections}: Space) {
+  public constructor({id, slug, name, order, sections}: SpaceModel) {
     // Constructor using functional destructuring so I can pass in an object as params
     // https://medium.com/@rileyhilliard/es6-destructuring-in-typescript-4c048a8e9e15
-    super();
+    //super();
     this.id = id
     this.slug = slug
     this.name = name
     this.order = order
-    this.sections = null!
+
+    this.sections = null
 
     // Convert relations into actual model class instances
     if (sections && sections.length > 0) {
       this.sections = []
       for (let section of sections) {
         section.slug_full = this.slug + section.slug
-        this.sections.push(new Section(section))
+        this.sections.push(new SectionModel(section))
       }
     }
   }
@@ -48,4 +52,10 @@ export class Space extends Model<Space>() {
   //   return super.get();
   // }
 
+}
+
+
+export const useSpaceModel = () => {
+  class ModelFactory extends Model<SpaceModel>(SpaceModel) {}
+  return new ModelFactory(inject('config'))
 }
