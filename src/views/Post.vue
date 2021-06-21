@@ -18,11 +18,11 @@
 </template>
 
 <script lang="ts">
-import { ref, Ref, UnwrapRef, defineComponent, onMounted, watch, inject } from 'vue'
+
+import { Post } from '@/models'
 import { useRoute } from 'vue-router'
-import { usePostModel, PostModel } from '@/models/post'
+import { defineComponent, watch } from 'vue'
 import Loading from '@/uvicore/components/loading/Loading1.vue'
-import { Results } from '@/uvicore/orm/results'
 
 
 export default defineComponent({
@@ -35,14 +35,12 @@ export default defineComponent({
   inject: ['config'],
 
   setup() {
+
     // Get current route
     const route = useRoute()
 
-    // Get models by factory
-    const Post = usePostModel()
-
     // Create an empty Post ref outside the watch
-    let post = ref<Results<PostModel>>(new Results());
+    const post = Post.newRef();
 
     // Watch for route path changes, and also run "immediate"
     watch(() => route.path, (path) => {
@@ -59,12 +57,11 @@ export default defineComponent({
         .where('topic.section.space.slug', '=', paths.space)
         .ref(post)
         .find()
-      console.log('POST:', post.value);
     }, {immediate: true})
 
-    onMounted(() => {
-      console.log('Posts mounted')
-    })
+    // onMounted(() => {
+    //   console.log('Posts mounted')
+    // })
 
     // Setup return
     return {

@@ -23,7 +23,15 @@ export default defineConfig({
   // Resolve paths and aliases
   resolve: {
     alias: {
-      '@': path.resolve('./src'),
+      '@': path.resolve(__dirname, './src'),
+      //'@uvicore': path.resolve(__dirname, './node_modules/@uvicore/vue3'),
     },
-  }
+  },
+
+  optimizeDeps: {
+    exclude: [
+      '@uvicore/vue3',
+    ],
+  },
+
 })

@@ -15,7 +15,10 @@
     "paths": {
       "@/*": [
         "./src/*"
-      ]
+      ],
+      // "@uvicore/*": [
+      //   "./node_modules/@uvicore/vue3/lib"
+      // ],
     },
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]

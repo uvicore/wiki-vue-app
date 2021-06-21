@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { inject } from 'vue';
 import { Model, ModelConfig } from '@/uvicore/orm/model';
-import { SectionModel } from '@/models/section';
+import { Section } from '@/models/section';
 
 
 //export class Topic extends Model<Topic>() {
-export class TopicModel {
+export class Topic extends Model<Topic>() {
   // API Fields
   id: number
   slug: string
@@ -19,7 +19,7 @@ export class TopicModel {
   slug_full: string
 
   // Relations
-  section: SectionModel|null
+  section: Section|null
 
   static _config: ModelConfig = {
     connection: 'wiki',
@@ -27,7 +27,7 @@ export class TopicModel {
   }
 
   public constructor({id, slug, slug_full, name, desc, icon, order, section_id, section}: Topic) {
-    //super();
+    super();
     this.id = id
     this.slug = slug
 
@@ -42,12 +42,12 @@ export class TopicModel {
     this.section = null
 
     // Convert relations into actual model class instances
-    if (section) this.section = new SectionModel(section)
+    if (section) this.section = new Section(section)
   }
 }
 
-export const useTopicModel = () => {
-  class ModelFactory extends Model<TopicModel>(TopicModel) {}
-  return new ModelFactory(inject('config'))
-}
+// export const useTopicModel = () => {
+//   class TopicFactory extends ModelFactory<TopicModel>(TopicModel) {}
+//   return new TopicFactory(inject('config'))
+// };
 

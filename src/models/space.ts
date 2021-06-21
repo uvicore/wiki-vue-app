@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { inject } from 'vue';
-import { SectionModel } from '@/models/section';
+import { Section } from '@/models/section';
 import { Model, ModelConfig } from '@/uvicore/orm/model';
 
 
 //export class Space extends Model<Space>() {
-export class SpaceModel {
+export class Space extends Model<Space>() {
   // API fields
   id: number
   slug: string
@@ -13,7 +13,7 @@ export class SpaceModel {
   order: number
 
   // Relations
-  sections: SectionModel[]|null
+  sections: Section[]|null
 
   static _config: ModelConfig = {
     connection: 'wiki',
@@ -26,15 +26,14 @@ export class SpaceModel {
     return this.name + '!'
   }
 
-  public constructor({id, slug, name, order, sections}: SpaceModel) {
+  public constructor({id, slug, name, order, sections}: Space) {
     // Constructor using functional destructuring so I can pass in an object as params
     // https://medium.com/@rileyhilliard/es6-destructuring-in-typescript-4c048a8e9e15
-    //super();
+    super();
     this.id = id
     this.slug = slug
     this.name = name
     this.order = order
-
     this.sections = null
 
     // Convert relations into actual model class instances
@@ -42,7 +41,7 @@ export class SpaceModel {
       this.sections = []
       for (let section of sections) {
         section.slug_full = this.slug + section.slug
-        this.sections.push(new SectionModel(section))
+        this.sections.push(new Section(section))
       }
     }
   }
@@ -55,7 +54,14 @@ export class SpaceModel {
 }
 
 
-export const useSpaceModel = () => {
-  class ModelFactory extends Model<SpaceModel>(SpaceModel) {}
-  return new ModelFactory(inject('config'))
-}
+// export const useSpaceModel = () => {
+//   class SpaceFactory extends ModelFactory<SpaceModel>(SpaceModel) {}
+//   return new SpaceFactory(inject('config'))
+// };
+
+
+// I tried self executing, but you get a WARN that inject() can only be used inside setup()
+// export const Space = (() => {
+//   class SpaceFactory extends ModelFactory<SpaceModel>(SpaceModel) {}
+//   return new SpaceFactory(inject('config'))
+// })();

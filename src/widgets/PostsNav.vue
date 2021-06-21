@@ -21,11 +21,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, inject } from 'vue'
+
+import { Post } from '@/models';
 import { useRoute } from 'vue-router';
-import { usePostModel, PostModel } from '@/models/post';
-import { Results } from '@/uvicore/orm/results';
+import { defineComponent, watch } from 'vue'
 import Loading from '@/uvicore/components/loading/Loading1.vue'
+
 
 export default defineComponent({
   name: 'PostsNav',
@@ -38,11 +39,8 @@ export default defineComponent({
     // Get current route
     const route = useRoute()
 
-    // Get models by factory
-    const Post = usePostModel()
-
     // Create an empty Post ref outside the watch
-    let posts = ref<Results<PostModel>>(new Results());
+    const posts = Post.newRef()
 
     // Watch for route path changes, and also run "immediate"
     watch(() => route.path, (path, prevPath) => {
@@ -51,8 +49,8 @@ export default defineComponent({
 
       // Not on a /space/section/topic path, don't run query
       if (!paths.topic) {
-        posts.value.reset()
-        posts.value.loading = false
+        posts.reset()
+        posts.loading = false
         return
       }
 

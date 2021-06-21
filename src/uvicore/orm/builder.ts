@@ -1,7 +1,9 @@
 import axios, { AxiosInstance } from 'axios';
-import { ref, Ref, UnwrapRef, inject } from 'vue';
+import { ref, Ref, UnwrapRef, reactive } from 'vue';
 import { ModelConfig } from './model';
 import { Results } from './results';
+
+import { useConfigStore } from '@/uvicore/config/store';
 
 
 /**
@@ -11,34 +13,33 @@ import { Results } from './results';
  * helps you query Uvicore style APIs with chainable elegance and precision!
  */
 export class QueryBuilder<E> {
-  entity: E
-  params?: string
-  entityConfig: ModelConfig
-  config: any
-  //api: AxiosInstance
+  private entity: E
+  private entityConfig: ModelConfig
+  private config: any
+  api: AxiosInstance
 
   // Query builder properties
   private _extraPath: string = ''
   private _state: any|null = null
   private _includes: string[]|null = null
   private _where: any|null = null
-  private _ref: Ref<UnwrapRef<Results<E>>>|null = null
+  //private _ref: Ref<UnwrapRef<Results<E>>>|null = null
+  private _ref: UnwrapRef<Results<E>>|null = null
 
-  public constructor(entity: E|any, config?: any) {
+  public constructor(entity: E|any) {
     // Entity is our actual Model class that inherits base Model and calls this .query()
-    console.log('ENTITY: ', entity)
     this.entity = entity;
     this.entityConfig = entity._config;
-    this.config = config
 
-    //this.config = inject('config');
-    // const api_url = this.config.app.apis[this.entityConfig.connection].url;
-    // console.log('MODEL API URL', api_url);
+    // Get config from state (inject does not work here)
+    this.config = useConfigStore().config;
 
-    // this.api = axios.create({
-    //   // Base API url is from this models connection string name
-    //   baseURL: 'https://wiki-api-local.triglobal.io/api'
-    // });
+    this.api = axios.create({
+      // Base API url is from this models connection string name
+      //baseURL: 'https://wiki-api-local.triglobal.io/api'
+      baseURL: this.config.app.apis[this.entityConfig.connection].url,
+    });
+
   }
 
   /**
@@ -63,7 +64,8 @@ export class QueryBuilder<E> {
    * @param ref Existing vue reactive ref
    * @returns QueryBuilder
    */
-  public ref(ref: Ref<UnwrapRef<Results<E>>>): this {
+  //public ref(ref: Ref<UnwrapRef<Results<E>>>): this {
+  public ref(ref: UnwrapRef<Results<E>>): this {
     this._ref = ref
     return this;
   }
@@ -100,7 +102,8 @@ export class QueryBuilder<E> {
    * @param value Field value
    * @returns Vue reactive reference of model Results class
    */
-  public find(field?: string, value?: string|number): Ref<UnwrapRef<Results<E>>> {
+  //public find(field?: string, value?: string|number): Ref<UnwrapRef<Results<E>>> {
+  public find(field?: string, value?: string|number): UnwrapRef<Results<E>> {
     if (field && value) {
       // Add a where for this custom field and value
       this.where(field, '=', value)
@@ -124,53 +127,41 @@ export class QueryBuilder<E> {
    * @param single If true, results should be a single Model instance, not an array of Model instances
    * @returns Vue reactive reference of model Results class
    */
-  public get(params?: string, single: boolean = false): Ref<UnwrapRef<Results<E>>> {
+  //public get(params?: string, single: boolean = false): Ref<UnwrapRef<Results<E>>> {
+  public get(params?: string, single: boolean = false): UnwrapRef<Results<E>> {
     if (this._ref) {
       // Passing in an existing ref for us to modify
       var results = this._ref;
 
       // Ensure ref is empty before query runs or .push will keep appending
-      results.value.reset();
+      results.reset();
+      //results.value.reset();
     } else {
       // No outside ref specified, create a new ref for these results
-      var results = ref<Results<E>>(new Results());
+      //var results = ref<Results<E>>(new Results());
+      var results = reactive<Results<E>>(new Results())
     }
 
     // Init blank results
-    results.value.results = []
+    //results.value.results = []
+    results.results = []
 
     // Build URL parameters from query builder
     const builderPath = this.buildUrlQuery(params);
-    console.log(builderPath);
-
-    // const config: any = inject('config');
-    // console.log('MODEL CONFIG:', config);
-    let api_url = ''
-    if (this.config) {
-      console.log('API_URL from CONFIG');
-      api_url = this.config.app.apis[this.entityConfig.connection].url;
-    } else {
-      api_url = 'https://wiki-api-local.triglobal.io/api'
-    }
-
-    console.log('MODEL API URL', api_url);
-
-    const api = axios.create({
-      // Base API url is from this models connection string name
-      //baseURL: 'https://wiki-api-local.triglobal.io/api'
-      baseURL: api_url
-    });
+    //console.log(builderPath);
 
     // Query Uvicore API
-    api.get(builderPath).then((res) => {
+    this.api.get(builderPath).then((res) => {
       setTimeout(() => { // Fake timer for loading screen prototyping
-        results.value.loading = false
+        //results.value.loading = false
+        results.loading = false
 
         // If custom params on .get() or comming from .find() we could be returning
         // a single non-array value.  Convert it to array for consistent handling.
         if (!Array.isArray(res.data)) res.data = [res.data]
 
-        results.value.count = res.data.length
+        //results.value.count = res.data.length
+        results.count = res.data.length
         if (res.data.length > 0) {
 
           // Map result into Model entity (actual instance of Model class)
@@ -182,9 +173,11 @@ export class QueryBuilder<E> {
 
             if (single) {
               // Single non-array from .find or custom params
-              results.value.result = record
+              //results.value.result = record
+              results.result = record
             } else {
-              results.value.results.push(record)
+              //results.value.results.push(record)
+              results.results.push(record)
             }
           }
         }
@@ -194,8 +187,10 @@ export class QueryBuilder<E> {
 
       }, 0);
     }).catch((error) => {
-      results.value.error = error
-      results.value.loading = false
+      //results.value.error = error
+      results.error = error
+      //results.value.loading = false
+      results.loading = false
       console.error(error);
     });
 

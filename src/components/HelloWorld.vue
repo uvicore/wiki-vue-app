@@ -42,8 +42,6 @@ import { ref, defineComponent, onMounted } from 'vue'
 //import { counterStore } from '@/store/counter'
 import { useCounterStore } from '@/store';
 import { useSpaceStore } from '@/store';
-//import { spaceStore } from '@/models/space';
-import { Space } from '@/models';
 
 
 export default defineComponent({

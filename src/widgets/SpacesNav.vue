@@ -97,214 +97,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, onMounted } from 'vue'
+import { defineComponent, ref  } from 'vue'
 import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/vue'
-import {
-  BookmarkAltIcon,
-  CalendarIcon,
-  ChartBarIcon,
-  CursorClickIcon,
-  MenuIcon,
-  PhoneIcon,
-  PlayIcon,
-  RefreshIcon,
-  ShieldCheckIcon,
-  SupportIcon,
-  ViewGridIcon,
-  XIcon,
-} from '@heroicons/vue/outline'
 import { ChevronDownIcon } from '@heroicons/vue/solid'
 import Loading from '@/uvicore/components/loading/Loading1.vue'
 
 import * as IconsOutline from '@heroicons/vue/outline';
 import * as IconsSolid from '@heroicons/vue/solid';
-import axios from 'axios';
-
-
-
-
-const spacesX = [
-  {
-    // table: spaces
-    id: 1,
-    slug: '/it',
-    name: 'IT',
-    order: 1,
-
-    // one-to-many "include" relation
-    // table: space_sections
-    sections: [
-      {
-        id: 1,
-        slug: '/production',
-        name: 'Production',
-        description: 'Production network blah blah',
-        icon: ChartBarIcon,
-        order: 1,
-        space_id: 1
-      },
-      {
-        id: 2,
-        slug: '/branch',
-        name: 'Branch',
-        description: 'Branch network blah blah',
-        icon: CursorClickIcon,
-        order: 2,
-        space_id: 1
-      },
-    ]
-  },
-  {
-    // table: spaces
-    id: 2,
-    slug: '/dev',
-    name: 'Development',
-    order: 2,
-
-    // table: space_sections
-    sections: [
-      {
-        id: 3,
-        slug: '/python',
-        name: 'Python',
-        description: 'Python blah blah',
-        icon: ShieldCheckIcon,
-        order: 1,
-        space_id: 2,
-      },
-      {
-        id: 4,
-        slug: '/rust',
-        name: 'Rust',
-        description: 'Rust blah blah',
-        icon: ViewGridIcon,
-        order: 2,
-        space_id: 2,
-      },
-    ]
-  },
-  {
-    // table: spaces
-    id: 3,
-    slug: '/support',
-    name: 'Tech Support',
-    order: 3,
-
-    // table: space_sections
-    sections: [
-      {
-        id: 5,
-        slug: '/pc',
-        name: 'PC',
-        description: 'PC support blah blah',
-        icon: RefreshIcon,
-        order: 1,
-        space_id: 3,
-      },
-      {
-        id: 6,
-        slug: '/printer',
-        name: 'Printer',
-        description: 'Printer support blah blah',
-        icon: ShieldCheckIcon,
-        order: 2,
-        space_id: 3,
-      },
-    ]
-  }
-]
-
-const company = [
-  { name: 'About', href: '#', icon: ShieldCheckIcon },
-  { name: 'Customers', href: '#', icon: ShieldCheckIcon },
-  { name: 'Press', href: '#', icon: ShieldCheckIcon },
-  { name: 'Careers', href: '#', icon: ShieldCheckIcon },
-  { name: 'Privacy', href: '#', icon: ShieldCheckIcon },
-]
-const resources = [
-  { name: 'Community', href: '#', icon: ShieldCheckIcon },
-  { name: 'Partners', href: '#', icon: ShieldCheckIcon },
-  { name: 'Guides', href: '#', icon: BookmarkAltIcon },
-  { name: 'Webinars', href: '#', icon: ShieldCheckIcon },
-]
-const blogPosts = [
-  {
-    id: 1,
-    name: 'Boost your conversion rate',
-    href: '#',
-    preview: 'Eget ullamcorper ac ut vulputate fames nec mattis pellentesque elementum. Viverra tempor id mus.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1558478551-1a378f63328e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2849&q=80',
-  },
-  {
-    id: 2,
-    name: 'How to use search engine optimization to drive traffic to your site',
-    href: '#',
-    preview: 'Eget ullamcorper ac ut vulputate fames nec mattis pellentesque elementum. Viverra tempor id mus.',
-    imageUrl:
-      'https://images.unsplash.com/1/apple-gear-looking-pretty.jpg?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80',
-  },
-]
-
-const solutions = [
-  {
-    name: 'Analytics',
-    description: 'Get a better understanding of where your traffic is coming from.',
-    href: '#',
-    icon: ChartBarIcon,
-  },
-  {
-    name: 'Engagement',
-    description: 'Speak directly to your customers in a more meaningful way.',
-    href: '#',
-    icon: CursorClickIcon,
-  },
-  {
-    name: 'Security',
-    description: "Your customers' data will be safe and secure.",
-    href: '#',
-    icon: ShieldCheckIcon,
-  },
-  {
-    name: 'Integrations',
-    description: "Connect with third-party tools that you're already using.",
-    href: '#',
-    icon: ViewGridIcon,
-  },
-  {
-    name: 'Automations',
-    description: 'Build strategic funnels that will drive your customers to convert',
-    href: '#',
-    icon: RefreshIcon,
-  },
-]
-
-const callsToAction = [
-  { name: 'Show All Posts', href: '#', icon: PlayIcon },
-  { name: 'Add Section', href: '#', icon: PhoneIcon },
-]
-
-//import { spaceStore } from '@/models/space-old';
-
-
-
-// const loadSpaces = async() => {
-//   const api = axios.create({
-//     baseURL: "https://wiki-api-local.triglobal.io/api",
-//   });
-//   // return api.get('/spaces?include=sections.topics').then((res) => {
-//   //   return res.data;
-//   // });
-//   return api.get('/spaces?include=sections.topics');
-// }
-
-
-const api = axios.create({
-  baseURL: "https://wiki-api-local.triglobal.io/api",
-});
-
-import { useSpaceModel } from '@/models/space';
-import { useSpaceStore } from '@/store/space';
+import { Space } from '@/models';
+import { useSpaceStore } from '@/store';
 
 export default defineComponent({
   name: 'SpacesNav',
@@ -315,14 +116,13 @@ export default defineComponent({
     PopoverGroup,
     PopoverPanel,
     ChevronDownIcon,
-    MenuIcon,
-    XIcon,
     Loading,
   },
 
   setup() {
+
     // Get models by factory
-    const Space = useSpaceModel()
+    //const Space = useSpaceModel()
 
     // In this example, we are storing our spaces in state using Pinia store
     // The spaces store returns the exact same Results object as our API client
@@ -392,8 +192,8 @@ export default defineComponent({
     // });
 
 
-    onMounted(() => {
-      console.log("Before Mount!");
+    // onMounted(() => {
+    //   console.log("Before Mount!");
 
 
       //spaces = Space.get6();
@@ -408,7 +208,7 @@ export default defineComponent({
       // (async () => {
       //   spaces.value = await Space.get();
       // })();
-    });
+    // });
 
 
 
@@ -425,10 +225,7 @@ export default defineComponent({
       //spaces: spaceStore.getState(),
       //spaces: spacesX,
       spaces,
-      solutions,
-      callsToAction,
       opened,
-      company, resources, blogPosts,
       IconsOutline,
       IconsSolid
     }

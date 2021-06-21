@@ -73,7 +73,7 @@
 import { defineComponent } from 'vue'
 import { ref } from 'vue'
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
-import { MenuIcon, XIcon } from '@heroicons/vue/outline'
+import { MenuIcon, XIcon, BellIcon } from '@heroicons/vue/outline'
 
 export default defineComponent({
   name: 'Header',
@@ -84,6 +84,7 @@ export default defineComponent({
     DisclosurePanel,
     MenuIcon,
     XIcon,
+    BellIcon,
   },
 
   setup() {

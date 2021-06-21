@@ -1,5 +1,4 @@
-import { Config } from '@/uvicore/config';
-import { OidcAuth } from '@/uvicore/auth/oidc';
+import { OidcAuth } from '@/uvicore/auth/adapters/oidc';
 
 
 export const config = {
@@ -21,14 +20,14 @@ export const config = {
   // Auth plugin configuration
   // ---------------------------------------------------------------------------
   auth: {
-    driver: 'oidc',
-    module: OidcAuth,
+    driver: 'oidc', // oidc is currently the only driver implemented
     oidc: {
+      adapter: OidcAuth,
       appName: 'wiki',
       appId: '7cc7d2a5-cc02-43ca-93bc-8476370ebf9d',
-      appUrl: 'https://wiki-local.triglobal.io',
-      redirectPath: '/login',
-      authUrl: 'https://auth-local.triglobal.io',
+      appUrl: 'https://wiki-local.triglobal.io', // No / at end
+      logoutRedirectPath: '/', // Begin with /
+      authUrl: 'https://auth-local.triglobal.io', // No / at end
     },
   }
 

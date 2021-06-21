@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '@/views/Home.vue'
 import Post from '@/views/Post.vue';
-//import auth from '@/services/auth';
+
+//import { auth } from '@/auth';
+//import { auth } from '@/uvicore/auth/adapters/oidc';
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -17,11 +19,29 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '@/views/About.vue'),
-    // meta: {
-    //   //authName: auth.authName,
-    //   authName: 'wiki',
-    // }
+    meta: {
+      //authName: auth.authName,
+      authName: 'wiki',
+    }
 
+  },
+
+  {
+    path: '/login',
+    name: 'login',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '@/views/About.vue'),
+  },
+
+  {
+    path: '/logout',
+    name: 'logout',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '@/views/Logout.vue'),
   },
 
   // FIXME still need '/:space/:section/:topic',
@@ -49,6 +69,6 @@ export const Router = createRouter({
   },
 })
 
-//auth.useRouter(router);
+//auth.useRouter(Router);
 
 

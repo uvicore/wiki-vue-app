@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { Model, ModelConfig } from '@/uvicore/orm/model';
-import { TopicModel} from '@/models/topic';
-import { inject } from 'vue';
+import { Topic} from '@/models/topic';
 import { QueryBuilder } from '@/uvicore/orm/builder';
+import { Ref, ref, UnwrapRef, inject } from 'vue';
+import { Results } from '@/uvicore/orm/results';
 
 
-export class PostModel {
+export class Post extends Model<Post>() {
   // API fields
   id: number
   slug: string
@@ -27,7 +28,7 @@ export class PostModel {
 
   // Relations
   //format: Format|null
-  topic: TopicModel|null
+  topic: Topic|null
   //creator: User|null
   //updator: User|null
 
@@ -36,13 +37,34 @@ export class PostModel {
     path: '/posts',
   }
 
+  public get name() {
+    return this.slug + this.id + this.body
+  }
+
+  /**
+   * Helper for components to explode the current path into space, section, topic, post slugs
+   * @param path router path
+   * @returns
+   */
+   public static explode_path(path: string): any {
+    if (!path) path = '////';
+    const s = path.split('/');
+    return {
+      space: s[1] ? '/' + s[1] : null,
+      section: s[2] ? '/' + s[2] : null,
+      topic: s[3] ? '/' + s[3] : null,
+      post: s[4] ? s[4] : null, // NO / before post slug
+    }
+  }
+
   public constructor({
     id, slug, title, body, format_key, topic_id,
     view_count, deleted, hidden, creator_id, updator_id,
     created_at, updated_at, indexed_at,
     slug_full,
     topic,
-  }: PostModel) {
+  }: Post) {
+    super();
     this.id = id
     this.slug = slug
     this.title = title
@@ -67,7 +89,7 @@ export class PostModel {
 
     // Convert relations into actual model class instances
     if (topic) {
-      this.topic = new TopicModel(topic)
+      this.topic = new Topic(topic)
       if (this.topic.section && this.topic.section.space) {
         // All relations are "included" to we can construct a full post slug
         this.slug_full = this.topic.section.space.slug + this.topic.section.slug + this.topic.slug + '/' + this.slug
@@ -76,27 +98,27 @@ export class PostModel {
   }
 }
 
-export const usePostModel = () => {
-  class ModelFactory extends Model<PostModel>(PostModel) {
-    // public query(): QueryBuilder<PostModel> {
-    //   return new QueryBuilder<PostModel>(PostModel, this.config);
-    // }
+// export const usePostModel = () => {
+//   class PostFactory extends ModelFactory<PostModel>(PostModel) {
+//     // public query(): QueryBuilder<PostModel> {
+//     //   return new QueryBuilder<PostModel>(PostModel, this.config);
+//     // }
 
-    /**
-     * Helper for components to explode the current path into space, section, topic, post slugs
-     * @param path router path
-     * @returns
-     */
-    explode_path(path: string): any {
-      if (!path) path = '////';
-      const s = path.split('/');
-      return {
-        space: s[1] ? '/' + s[1] : null,
-        section: s[2] ? '/' + s[2] : null,
-        topic: s[3] ? '/' + s[3] : null,
-        post: s[4] ? s[4] : null, // NO / before post slug
-      }
-    }
-  }
-  return new ModelFactory(inject('config'))
-}
+//     /**
+//      * Helper for components to explode the current path into space, section, topic, post slugs
+//      * @param path router path
+//      * @returns
+//      */
+//     explode_path(path: string): any {
+//       if (!path) path = '////';
+//       const s = path.split('/');
+//       return {
+//         space: s[1] ? '/' + s[1] : null,
+//         section: s[2] ? '/' + s[2] : null,
+//         topic: s[3] ? '/' + s[3] : null,
+//         post: s[4] ? s[4] : null, // NO / before post slug
+//       }
+//     }
+//   }
+//   return new PostFactory(inject('config'))
+// }

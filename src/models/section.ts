@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { Model, ModelConfig } from '@/uvicore/orm/model';
-import { SpaceModel } from '@/models/space';
-import { TopicModel } from '@/models/topic';
+import { Space } from '@/models/space';
+import { Topic } from '@/models/topic';
 import { inject } from 'vue';
 
 
 //export class Section extends Model<Section>() {
-export class SectionModel {
+export class Section extends Model<Section>() {
   // API fields
   id: number
   slug: string
@@ -19,8 +19,8 @@ export class SectionModel {
   slug_full: string
 
   // Relations
-  space: SpaceModel|null
-  topics: TopicModel[]|null
+  space: Space|null
+  topics: Topic[]|null
 
   static _config: ModelConfig = {
     connection: 'wiki',
@@ -31,8 +31,8 @@ export class SectionModel {
     id, slug, name, icon, order, space_id,
     slug_full,
     space, topics
-  }: SectionModel) {
-    //super();
+  }: Section) {
+    super();
     this.id = id
     this.slug = slug
     this.name = name
@@ -50,16 +50,16 @@ export class SectionModel {
       this.topics = []
       for (let topic of topics) {
         topic.slug_full = this.slug_full + topic.slug
-        this.topics.push(new TopicModel(topic));
+        this.topics.push(new Topic(topic));
       }
     }
 
-    if (space) this.space = new SpaceModel(space)
+    if (space) this.space = new Space(space)
   }
 }
 
 
-export const usePostModel = () => {
-  class ModelFactory extends Model<SectionModel>(SectionModel) {}
-  return new ModelFactory(inject('config'))
-}
+// export const useSectionModel = () => {
+//   class SectionFactory extends ModelFactory<SectionModel>(SectionModel) {}
+//   return new SectionFactory(inject('config'))
+// };

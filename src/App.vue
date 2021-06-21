@@ -24,7 +24,10 @@
       </button>
 
       <!-- Profile dropdown -->
-      <Menu as="div" class="ml-4 relative flex-shrink-0">
+      <button @click="login" v-if="!user.authenticated">Login</button>
+      <!-- <button @click="logout" v-if="user.authenticated">Logout</button> -->
+      <!-- <button @click="login">Login</button> -->
+      <Menu v-if="user.authenticated" as="div" class="ml-4 relative flex-shrink-0">
         <div>
           <MenuButton class="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             <span class="sr-only">Open user menu</span>
@@ -40,7 +43,7 @@
               <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Settings</a>
             </MenuItem>
             <MenuItem v-slot="{ active }">
-              <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign out</a>
+              <a href="#" @click="logout" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign out</a>
             </MenuItem>
           </MenuItems>
         </transition>
@@ -56,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, inject } from 'vue'
 //import HelloWorld from './components/HelloWorld.vue'
 //import Header from './components/layout/Header.vue'
 //import Header from '@/components/layout/Header.vue'
@@ -67,6 +70,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import SpacesNav from '@/widgets/SpacesNav.vue'
 import SearchBox from '@/widgets/SearchBox.vue'
 import PostsNav from '@/widgets/PostsNav.vue'
+import { useRouter } from 'vue-router';
 import {
   BellIcon,
   CogIcon,
@@ -78,6 +82,10 @@ import {
   XIcon,
 } from '@heroicons/vue/outline'
 
+import { useUserStore } from '@/uvicore/auth/store';
+
+//import { auth } from './auth';
+//import { auth } from '@/uvicore/auth/adapters/oidc';
 
 export default defineComponent({
   name: 'App',
@@ -99,20 +107,51 @@ export default defineComponent({
     // Hero Icons
     BellIcon,
 
-
     //Header,
   },
 
+
+
   setup() {
+    // Get router
+    const router = useRouter();
+
+    const user = useUserStore();
+    console.log('USER: ', user);
+    console.log('USER: ', user.authenticated);
+
+    function changeRoute(route: string) {
+      router.push(route);
+    }
+
+    function login() {
+      console.log('Login click');
+      //auth.signIn();
+      //auth.login();
+      user.login();
+    }
+
+    function logout() {
+      console.log('Logout click');
+      user.logout()
+    }
+
     return {
+      changeRoute,
+      login,
+      logout,
+      user,
+      //auth,
     }
   },
 
-  methods: {
-    changeRoute(route: string) {
-      this.$router.push(route)
-    }
-  }
+  // methods: {
+  //   login() {
+  //     console.log('Login click');
+  //     console.log(this.$oidc);
+  //   }
+  // }
+
 })
 </script>
 

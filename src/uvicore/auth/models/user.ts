@@ -11,5 +11,5 @@ export interface User {
   roles: string[],
   permissions: string[],
   superadmin: boolean,
-  authenticated: boolean,
+  //authenticated: boolean,
 }
