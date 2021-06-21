@@ -97,28 +97,3 @@ export class Post extends Model<Post>() {
     }
   }
 }
-
-// export const usePostModel = () => {
-//   class PostFactory extends ModelFactory<PostModel>(PostModel) {
-//     // public query(): QueryBuilder<PostModel> {
-//     //   return new QueryBuilder<PostModel>(PostModel, this.config);
-//     // }
-
-//     /**
-//      * Helper for components to explode the current path into space, section, topic, post slugs
-//      * @param path router path
-//      * @returns
-//      */
-//     explode_path(path: string): any {
-//       if (!path) path = '////';
-//       const s = path.split('/');
-//       return {
-//         space: s[1] ? '/' + s[1] : null,
-//         section: s[2] ? '/' + s[2] : null,
-//         topic: s[3] ? '/' + s[3] : null,
-//         post: s[4] ? s[4] : null, // NO / before post slug
-//       }
-//     }
-//   }
-//   return new PostFactory(inject('config'))
-// }

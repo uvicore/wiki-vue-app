@@ -3,6 +3,8 @@ import { Store } from "@/uvicore/store"
 import {reactive} from 'vue';
 
 
+// This was a custom store by mreschke before Pinia
+
 export interface Topic extends Object {
   id: number,
   slug: string,

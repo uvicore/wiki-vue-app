@@ -13,19 +13,29 @@ import { useConfigStore } from '@/uvicore/config/store';
  * helps you query Uvicore style APIs with chainable elegance and precision!
  */
 export class QueryBuilder<E> {
+  // Actual model class (not instance) that will be instantiated for each axios result
   private entity: E
+
+  // Models config, holds API connection string, url path and more
   private entityConfig: ModelConfig
+
+  // Apps full config object
   private config: any
-  api: AxiosInstance
+
+  // Axios instance based on models URL and path
+  private api: AxiosInstance
 
   // Query builder properties
   private _extraPath: string = ''
   private _state: any|null = null
   private _includes: string[]|null = null
   private _where: any|null = null
-  //private _ref: Ref<UnwrapRef<Results<E>>>|null = null
   private _ref: UnwrapRef<Results<E>>|null = null
 
+  /**
+   * Instantiate class
+   * @param entity actual model class (non instance)
+   */
   public constructor(entity: E|any) {
     // Entity is our actual Model class that inherits base Model and calls this .query()
     this.entity = entity;
@@ -36,7 +46,6 @@ export class QueryBuilder<E> {
 
     this.api = axios.create({
       // Base API url is from this models connection string name
-      //baseURL: 'https://wiki-api-local.triglobal.io/api'
       baseURL: this.config.app.apis[this.entityConfig.connection].url,
     });
 
@@ -44,11 +53,11 @@ export class QueryBuilder<E> {
 
   /**
    * Return results into a store.  Requires store have a .set() action like so:
-     set(state: Ref<UnwrapRef<Results<Space>>>) {
-      this.loading = state.value.loading
-      this.error = state.value.error
-      this.result = state.value.result
-      this.results = state.value.results
+     set(state: UnwrapRef<Results<Space>>) {
+      this.loading = state.loading
+      this.error = state.error
+      this.result = state.result
+      this.results = state.results
      },
    * @param store
    * @returns QueryBuilder
@@ -64,7 +73,6 @@ export class QueryBuilder<E> {
    * @param ref Existing vue reactive ref
    * @returns QueryBuilder
    */
-  //public ref(ref: Ref<UnwrapRef<Results<E>>>): this {
   public ref(ref: UnwrapRef<Results<E>>): this {
     this._ref = ref
     return this;
@@ -102,7 +110,6 @@ export class QueryBuilder<E> {
    * @param value Field value
    * @returns Vue reactive reference of model Results class
    */
-  //public find(field?: string, value?: string|number): Ref<UnwrapRef<Results<E>>> {
   public find(field?: string, value?: string|number): UnwrapRef<Results<E>> {
     if (field && value) {
       // Add a where for this custom field and value
@@ -127,7 +134,6 @@ export class QueryBuilder<E> {
    * @param single If true, results should be a single Model instance, not an array of Model instances
    * @returns Vue reactive reference of model Results class
    */
-  //public get(params?: string, single: boolean = false): Ref<UnwrapRef<Results<E>>> {
   public get(params?: string, single: boolean = false): UnwrapRef<Results<E>> {
     if (this._ref) {
       // Passing in an existing ref for us to modify
@@ -135,10 +141,8 @@ export class QueryBuilder<E> {
 
       // Ensure ref is empty before query runs or .push will keep appending
       results.reset();
-      //results.value.reset();
     } else {
       // No outside ref specified, create a new ref for these results
-      //var results = ref<Results<E>>(new Results());
       var results = reactive<Results<E>>(new Results())
     }
 
@@ -153,7 +157,6 @@ export class QueryBuilder<E> {
     // Query Uvicore API
     this.api.get(builderPath).then((res) => {
       setTimeout(() => { // Fake timer for loading screen prototyping
-        //results.value.loading = false
         results.loading = false
 
         // If custom params on .get() or comming from .find() we could be returning
@@ -173,10 +176,8 @@ export class QueryBuilder<E> {
 
             if (single) {
               // Single non-array from .find or custom params
-              //results.value.result = record
               results.result = record
             } else {
-              //results.value.results.push(record)
               results.results.push(record)
             }
           }
@@ -187,9 +188,7 @@ export class QueryBuilder<E> {
 
       }, 0);
     }).catch((error) => {
-      //results.value.error = error
       results.error = error
-      //results.value.loading = false
       results.loading = false
       console.error(error);
     });
@@ -228,7 +227,6 @@ export class QueryBuilder<E> {
       // Return url
       return url;
     }
-
 
 }
 

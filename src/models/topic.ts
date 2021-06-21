@@ -1,10 +1,7 @@
-import axios from 'axios';
-import { inject } from 'vue';
-import { Model, ModelConfig } from '@/uvicore/orm/model';
 import { Section } from '@/models/section';
+import { Model, ModelConfig } from '@/uvicore/orm/model';
 
 
-//export class Topic extends Model<Topic>() {
 export class Topic extends Model<Topic>() {
   // API Fields
   id: number
@@ -45,9 +42,3 @@ export class Topic extends Model<Topic>() {
     if (section) this.section = new Section(section)
   }
 }
-
-// export const useTopicModel = () => {
-//   class TopicFactory extends ModelFactory<TopicModel>(TopicModel) {}
-//   return new TopicFactory(inject('config'))
-// };
-

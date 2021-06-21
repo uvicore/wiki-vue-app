@@ -5,7 +5,6 @@ import { Topic } from '@/models/topic';
 import { inject } from 'vue';
 
 
-//export class Section extends Model<Section>() {
 export class Section extends Model<Section>() {
   // API fields
   id: number
@@ -57,9 +56,3 @@ export class Section extends Model<Section>() {
     if (space) this.space = new Space(space)
   }
 }
-
-
-// export const useSectionModel = () => {
-//   class SectionFactory extends ModelFactory<SectionModel>(SectionModel) {}
-//   return new SectionFactory(inject('config'))
-// };

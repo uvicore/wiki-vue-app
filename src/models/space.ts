@@ -1,10 +1,7 @@
-import axios from 'axios';
-import { inject } from 'vue';
 import { Section } from '@/models/section';
 import { Model, ModelConfig } from '@/uvicore/orm/model';
 
 
-//export class Space extends Model<Space>() {
 export class Space extends Model<Space>() {
   // API fields
   id: number
@@ -52,16 +49,3 @@ export class Space extends Model<Space>() {
   // }
 
 }
-
-
-// export const useSpaceModel = () => {
-//   class SpaceFactory extends ModelFactory<SpaceModel>(SpaceModel) {}
-//   return new SpaceFactory(inject('config'))
-// };
-
-
-// I tried self executing, but you get a WARN that inject() can only be used inside setup()
-// export const Space = (() => {
-//   class SpaceFactory extends ModelFactory<SpaceModel>(SpaceModel) {}
-//   return new SpaceFactory(inject('config'))
-// })();
