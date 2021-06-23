@@ -1,0 +1,9 @@
+class User {
+  constructor(id, name, email) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
+  }
+}
+export { User };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXV0aC5lcy5qcyIsInNvdXJjZXMiOlsiLi4vbGliL2F1dGgvbW9kZWxzL3VzZXIudHMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGNsYXNzIFVzZXIge1xuICAgIGlkOiBudW1iZXJcbiAgICBuYW1lOiBzdHJpbmdcbiAgICBlbWFpbDogc3RyaW5nXG5cbiAgICBwdWJsaWMgY29uc3RydWN0b3IoaWQ6IG51bWJlciwgbmFtZTogc3RyaW5nLCBlbWFpbDogc3RyaW5nKSB7XG4gICAgICAgIHRoaXMuaWQgPSBpZFxuICAgICAgICB0aGlzLm5hbWUgPSBuYW1lXG4gICAgICAgIHRoaXMuZW1haWwgPSBlbWFpbFxuICAgIH1cbn1cbiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiV0FBa0I7QUFBQSxFQUtQLFlBQVksSUFBWSxNQUFjLE9BQWU7U0FDbkQsS0FBSztTQUNMLE9BQU87U0FDUCxRQUFRO0FBQUE7QUFBQTs7In0=

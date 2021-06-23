@@ -1,0 +1,22 @@
+{
+  "name": "@uvicore/vue3/components",
+  "version": "0.0.2",
+  "description": "Uvicore Vue3 Support Library",
+  "main": "./components.umd.js",
+  "module": "./components.es.js",
+  "types": "./index.d.ts",
+  "dependencies": {
+    "vue": "^3.0.11"
+  },
+  "devDependencies": {
+    "@types/node": "^15.12.2",
+    "@vitejs/plugin-vue": "^1.2.3",
+    "@vue/compiler-sfc": "^3.0.5",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "tslib": "^2.3.0",
+    "typescript": "^4.3.2",
+    "vite": "^2.3.7",
+    "vite-plugin-dts": "^0.5.1",
+    "vue-tsc": "^0.0.24"
+  }
+}

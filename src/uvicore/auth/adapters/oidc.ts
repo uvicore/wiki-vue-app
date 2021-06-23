@@ -63,15 +63,6 @@ export class OidcAuth implements AuthInterface {
   public init(): this {
     let appUrl: string = this.config.appUrl;  // Fix to ensure / at end
     let authUrl: string = this.config.authUrl;  // Fix to ensure NO / at end
-    // let metadata = {
-    //   issuer: authUrl,
-    //   authorization_endpoint: `${authUrl}/oauth2/authorize`,
-    //   token_endpoint: `${authUrl}/oauth2/token`,
-    //   userinfo_endpoint: `${authUrl}/oauth2/userinfo`,
-    //   jwks_uri: `${authUrl}/.well-known/jwks.json`,
-    //   end_session_endpoint: `${authUrl}/oauth2/logout?client_id=${this.config.appId}`,
-    //   introspect_endpoint: `${authUrl}/oauth2/introspect`,
-    // };
 
     let authConfig = {
       authority: authUrl,
@@ -86,12 +77,29 @@ export class OidcAuth implements AuthInterface {
 
       // Logout redirect
       post_logout_redirect_uri: `${appUrl}${this.config.logoutRedirectPath}`,
-      //metadata,
-      //automaticSilentRenew: true,
 
+      // Advanced control (not needed by default with fusionauth, but could merge with config
+      metadata: {
+        issuer: authUrl,
+        authorization_endpoint: `${authUrl}/oauth2/authorize`,
+        token_endpoint: `${authUrl}/oauth2/token`,
+
+        userinfo_endpoint: `${authUrl}/oauth2/userinfo`,
+        //userinfo_endpoint: `${appUrl}/oauth2/userinfo`,
+
+        jwks_uri: `${authUrl}/.well-known/jwks.json`,
+        end_session_endpoint: `${authUrl}/oauth2/logout?client_id=${this.config.appId}`,
+        introspect_endpoint: `${authUrl}/oauth2/introspect`,
+      },
+
+      automaticSilentRenew: true,
+
+      userStore: new WebStorageStateStore({ store: window[this.config.storage] }),
       //userStore: new WebStorageStateStore({ store: window.sessionStorage }),
-      //metadataUrl:
-      //  "https://auth-local.triglobal.io/.well-known/openid-configuration/a7f35245-83d3-7261-4f33-535925ec58c8",
+      //userStore: new WebStorageStateStore({ store: window.localStorage }),
+
+      //metadataUrl: "https://auth-local.triglobal.io/.well-known/openid-configuration/a7f35245-83d3-7261-4f33-535925ec58c8",
+
     } as UserManagerSettings;
 
     const auth: BaseOidcAuth = createOidcAuth(

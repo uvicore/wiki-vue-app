@@ -18,16 +18,21 @@ export const config = {
 
   // ---------------------------------------------------------------------------
   // Auth plugin configuration
+  // appUrl and authUrl must NOT end with a /
+  // logoutRedirectPath must begin with a / and can be only a / for the home page
+  // storage can be one of localStorage or sessionStorage (case-sensitive)
   // ---------------------------------------------------------------------------
   auth: {
     driver: 'oidc', // oidc is currently the only driver implemented
     oidc: {
       adapter: OidcAuth,
+
       appName: 'wiki',
       appId: '7cc7d2a5-cc02-43ca-93bc-8476370ebf9d',
-      appUrl: 'https://wiki-local.triglobal.io', // No / at end
-      logoutRedirectPath: '/', // Begin with /
-      authUrl: 'https://auth-local.triglobal.io', // No / at end
+      appUrl: 'https://wiki-local.triglobal.io',
+      authUrl: 'https://auth-local.triglobal.io',
+      logoutRedirectPath: '/logout',
+      storage: 'localStorage',
     },
   }
 
