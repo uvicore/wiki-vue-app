@@ -9,7 +9,7 @@
 
 import { defineComponent } from 'vue'
 import { useCounterStore } from '@/store/counter'
-import { useUserStore } from '@/uvicore/auth/store';
+import { useUserStore } from '@uvicore/vue3/auth/store';
 
 
 export default defineComponent({

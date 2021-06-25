@@ -22,7 +22,7 @@
 import { Post } from '@/models'
 import { useRoute } from 'vue-router'
 import { defineComponent, watch } from 'vue'
-import Loading from '@/uvicore/components/loading/Loading1.vue'
+import Loading from '@uvicore/vue3/components/loading/Loading1.vue'
 
 
 export default defineComponent({

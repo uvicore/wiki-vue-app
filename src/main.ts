@@ -5,20 +5,20 @@ import { createApp } from 'vue';
 // Plugins
 import { Router } from './router';
 import { createPinia } from 'pinia';
-import { createAuth } from '@/uvicore/auth';
-import { createConfig } from '@/uvicore/config';
+import { createAuth } from '@uvicore/vue3/auth';
+import { createConfig } from '@uvicore/vue3/config';
 
 // Assets
 import './assets/css/app.css';
 
 // Config file
 import { config } from '@/config';
-import { useUserStore } from '@/uvicore/auth/store';
-import { useConfigStore } from '@/uvicore/config/store';
+import { useUserStore } from '@uvicore/vue3/auth/store';
+import { useConfigStore } from '@uvicore/vue3/config/store';
 
 //import { auth } from './auth';
 
-import { OidcAuth } from '@/uvicore/auth/adapters/oidc';
+import { OidcAuth } from '@uvicore/vue3/auth/adapters/oidc';
 // let auth = new OidcAuth(config.auth.oidc).init().base;
 //import { auth } from '@/uvicore/auth/adapters/oidc';
 

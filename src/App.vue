@@ -63,7 +63,7 @@ import { defineComponent, inject } from 'vue'
 //import HelloWorld from './components/HelloWorld.vue'
 //import Header from './components/layout/Header.vue'
 //import Header from '@/components/layout/Header.vue'
-import Layout from '@/uvicore/layouts/basic/Layout.vue'
+import Layout from '@uvicore/vue3/layouts/basic/Layout.vue'
 //import Header from './components/layout/Header.vue'
 //import { BellIcon } from '@heroicons/vue/outline'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
@@ -82,7 +82,7 @@ import {
   XIcon,
 } from '@heroicons/vue/outline'
 
-import { useUserStore } from '@/uvicore/auth/store';
+import { useUserStore } from '@uvicore/vue3/auth/store';
 
 //import { auth } from './auth';
 //import { auth } from '@/uvicore/auth/adapters/oidc';

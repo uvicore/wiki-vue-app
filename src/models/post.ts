@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { Model, ModelConfig } from '@/uvicore/orm/model';
+import { Model, ModelConfig } from '@uvicore/vue3/orm/model';
 import { Topic} from '@/models/topic';
-import { QueryBuilder } from '@/uvicore/orm/builder';
+import { QueryBuilder } from '@uvicore/vue3/orm/builder';
 import { Ref, ref, UnwrapRef, inject } from 'vue';
-import { Results } from '@/uvicore/orm/results';
+import { Results } from '@uvicore/vue3/orm/results';
 
 
 export class Post extends Model<Post>() {

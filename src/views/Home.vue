@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import HelloWorld from '../components/HelloWorld.vue'; // @ is an alias to /src
+//import HelloWorld from '../components/HelloWorld.vue'; // @ is an alias to /src
 
 // import { HelloWorld } from '@uvicore/vue3'
 // import { User } from '@uvicore/vue3';
@@ -19,7 +19,7 @@ import HelloWorld from '../components/HelloWorld.vue'; // @ is an alias to /src
 
 
 // vite dev npm link from index.ts
-// import { HelloWorld } from '@uvicore/vue3/components';
+import { HelloWorld } from '@uvicore/vue3/components';
 // import { Loading1 } from '@uvicore/vue3/components/loading';
 // import { User } from '@uvicore/vue3/auth/models';
 

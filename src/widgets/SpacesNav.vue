@@ -100,7 +100,7 @@
 import { defineComponent, ref  } from 'vue'
 import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/vue'
 import { ChevronDownIcon } from '@heroicons/vue/solid'
-import Loading from '@/uvicore/components/loading/Loading1.vue'
+import Loading from '@uvicore/vue3/components/loading/Loading1.vue'
 
 import * as IconsOutline from '@heroicons/vue/outline';
 import * as IconsSolid from '@heroicons/vue/solid';

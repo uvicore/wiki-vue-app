@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Model, ModelConfig } from '@/uvicore/orm/model';
+import { Model, ModelConfig } from '@uvicore/vue3/orm/model';
 import { Space } from '@/models/space';
 import { Topic } from '@/models/topic';
 import { inject } from 'vue';

@@ -1,7 +1,7 @@
 import { Space } from '@/models';
 import { defineStore } from 'pinia';
 import { UnwrapRef, watch } from 'vue';
-import { Results } from '@/uvicore/orm/results';
+import { Results } from '@uvicore/vue3/orm/results';
 
 
 export const useSpaceStore = defineStore({
