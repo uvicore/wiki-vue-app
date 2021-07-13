@@ -10,7 +10,6 @@
     "@headlessui/vue": "^1.2.0",
     "@heroicons/vue": "^1.0.1",
     "@tailwindcss/forms": "^0.3.2",
-    "@uvicore/vue3": "file:../../../mreschke/node/uvicore/vue3/projects/vue3",
     "axios": "^0.21.1",
     "pinia": "^2.0.0-beta.2",
     "vue": "^3.1.1",

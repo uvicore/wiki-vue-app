@@ -1,4 +1,4 @@
-import { OidcAuth } from '@uvicore/vue3/auth/adapters/oidc';
+import { OidcAuth } from '@uvicore/vue3-auth';
 
 
 export const config = {

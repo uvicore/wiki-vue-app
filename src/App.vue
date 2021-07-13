@@ -63,7 +63,11 @@ import { defineComponent, inject } from 'vue'
 //import HelloWorld from './components/HelloWorld.vue'
 //import Header from './components/layout/Header.vue'
 //import Header from '@/components/layout/Header.vue'
-import Layout from '@uvicore/vue3/layouts/basic/Layout.vue'
+//import Layout from '@uvicore/vue3/layouts/basic/Layout.vue'
+
+import Layout from '@uvicore/vue3'
+
+
 //import Header from './components/layout/Header.vue'
 //import { BellIcon } from '@heroicons/vue/outline'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'

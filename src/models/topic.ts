@@ -1,5 +1,5 @@
 import { Section } from '@/models/section';
-import { Model, ModelConfig } from '@uvicore/vue3/orm/model';
+import { Model, ModelConfig } from '@uvicore/vue-orm';
 
 
 export class Topic extends Model<Topic>() {

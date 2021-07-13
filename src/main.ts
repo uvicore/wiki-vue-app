@@ -5,23 +5,19 @@ import { createApp } from 'vue';
 // Plugins
 import { Router } from './router';
 import { createPinia } from 'pinia';
-import { createAuth } from '@uvicore/vue3/auth';
-import { createConfig } from '@uvicore/vue3/config';
+import { createAuth, useUserStore, OidcAuth } from '@uvicore/vue-auth';
+import { createConfig } from '@uvicore/vue-config';
 
 // Assets
 import './assets/css/app.css';
 
 // Config file
 import { config } from '@/config';
-import { useUserStore } from '@uvicore/vue3/auth/store';
-import { useConfigStore } from '@uvicore/vue3/config/store';
+import { useConfigStore } from '@uvicore/vue-config';
 
 //import { auth } from './auth';
-
-import { OidcAuth } from '@uvicore/vue3/auth/adapters/oidc';
 // let auth = new OidcAuth(config.auth.oidc).init().base;
 //import { auth } from '@/uvicore/auth/adapters/oidc';
-
 
 
 // Create the auth system based on the configured auth adapter
