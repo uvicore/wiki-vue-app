@@ -1,11 +1,12 @@
-import axios from 'axios';
-import { Model, ModelConfig } from '@uvicore/vue-orm';
 import { Space } from '@/models/space';
 import { Topic } from '@/models/topic';
-import { inject } from 'vue';
+import { reactive, UnwrapRef } from 'vue';
+import { Model, ModelConfig, QueryBuilder, Results } from '@uvicore/vue-orm';
 
-
-export class Section extends Model<Section>() {
+/**
+ * Section Model
+ */
+class SectionModel extends Model {
   // API fields
   id: number
   slug: string
@@ -30,7 +31,7 @@ export class Section extends Model<Section>() {
     id, slug, name, icon, order, space_id,
     slug_full,
     space, topics
-  }: Section) {
+  }: SectionModel) {
     super();
     this.id = id
     this.slug = slug
@@ -54,5 +55,19 @@ export class Section extends Model<Section>() {
     }
 
     if (space) this.space = new Space(space)
+  }
+}
+
+
+/**
+ * Space model statics (because Generics do not work on static properties)
+ */
+ export class Section extends SectionModel {
+  public static query(): QueryBuilder<SectionModel> {
+    return new QueryBuilder<SectionModel>(SectionModel);
+  }
+
+  public static newRef(): UnwrapRef<Results<SectionModel>> {
+    return reactive<Results<SectionModel>>(new Results());
   }
 }

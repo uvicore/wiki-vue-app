@@ -1,8 +1,11 @@
 import { Section } from '@/models/section';
-import { Model, ModelConfig } from '@uvicore/vue-orm';
+import { reactive, UnwrapRef } from 'vue';
+import { Model, ModelConfig, QueryBuilder, Results } from '@uvicore/vue-orm';
 
-
-export class Topic extends Model<Topic>() {
+/**
+ * Topic Model
+ */
+export class TopicModel extends Model {
   // API Fields
   id: number
   slug: string
@@ -23,7 +26,7 @@ export class Topic extends Model<Topic>() {
     path: '/topics',
   }
 
-  public constructor({id, slug, slug_full, name, desc, icon, order, section_id, section}: Topic) {
+  public constructor({id, slug, slug_full, name, desc, icon, order, section_id, section}: TopicModel) {
     super();
     this.id = id
     this.slug = slug
@@ -40,5 +43,19 @@ export class Topic extends Model<Topic>() {
 
     // Convert relations into actual model class instances
     if (section) this.section = new Section(section)
+  }
+}
+
+
+/**
+ * Space model statics (because Generics do not work on static properties)
+ */
+ export class Topic extends TopicModel {
+  public static query(): QueryBuilder<TopicModel> {
+    return new QueryBuilder<TopicModel>(TopicModel);
+  }
+
+  public static newRef(): UnwrapRef<Results<TopicModel>> {
+    return reactive<Results<TopicModel>>(new Results());
   }
 }

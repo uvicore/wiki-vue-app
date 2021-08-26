@@ -97,10 +97,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref  } from 'vue'
-import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/vue'
-import { ChevronDownIcon } from '@heroicons/vue/solid'
-import Loading from '@uvicore/vue3/components/loading/Loading1.vue'
+import { defineComponent, ref  } from 'vue';
+import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/vue';
+import { ChevronDownIcon } from '@heroicons/vue/solid';
+import Loading from '@/components/Loading.vue';
 
 import * as IconsOutline from '@heroicons/vue/outline';
 import * as IconsSolid from '@heroicons/vue/solid';
@@ -130,12 +130,15 @@ export default defineComponent({
     // instead of returning them as a ref!
     const spaces = useSpaceStore()
 
+
+
     // If we wanted to skip the API client and call an "action" on our store
     //spaces.loadSpaces();
 
     // But using the API client is more powerful.  We can still use the API client
     // but have the results set to our space store using .state(spaces)!
     Space.query().include(['sections.topics']).state(spaces).get();
+
 
     // If we didn't have a store, we could return the result as a reactive ref
     //let spaces = Space.query().include(['sections.topics']).get();

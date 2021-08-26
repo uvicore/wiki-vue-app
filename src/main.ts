@@ -5,7 +5,7 @@ import { createApp } from 'vue';
 // Plugins
 import { Router } from './router';
 import { createPinia } from 'pinia';
-import { createAuth, useUserStore, OidcAuth } from '@uvicore/vue-auth';
+import { createAuth, useUserStore } from '@uvicore/vue-auth';
 import { createConfig } from '@uvicore/vue-config';
 
 // Assets
@@ -21,30 +21,29 @@ import { useConfigStore } from '@uvicore/vue-config';
 
 
 // Create the auth system based on the configured auth adapter
-const auth = createAuth(config.auth);
-console.log('xx Auth Adapter', auth)
-
+const auth = createAuth(config.auth, config.app.apis);
 
 // Hook vue router into the auth system for JWT route interceptors
+// @ts-ignore
 auth.useRouter(Router);
-
 
 // Once auth has started, create the vue app
 // If the vue app is created before auth is ready, the main App.vue will not
 // see us as authenticated propely, even through the ref reactivity system.
 auth.startup().then((ok: any) => {
   if (ok) {
-    console.log('AUTH OK');
 
-    // Application Creation
+    // Create Vue Application
     const app = createApp(App);
 
     // Configuration plugin
     // Accessible in our globalProperties using this.$config
     // But also as an injection token called 'config' since setup() cannot access 'this.'
+    // @ts-ignore
     app.use(createConfig(config));
 
     // Pinia Store (a vuex replacement)
+    // @ts-ignore
     app.use(createPinia());
 
     // Authentication and authorization plugin
@@ -57,18 +56,19 @@ auth.startup().then((ok: any) => {
     app.use(Router);
     //app.use(store, key);
 
+    // Initialize auth user pinia store
     const user = useUserStore();
     user.init(auth);
 
+    // Initialize config pinia store
     const cs = useConfigStore();
-    console.log('yyyyyyyyyyyyyy', config)
     cs.load(config);
 
     // Application Mount
     app.mount('#app');
 
   } else {
-    console.error('AUTH NOT OK');
+    console.error('Uvicore Authentication System Error');
   }
 })
 

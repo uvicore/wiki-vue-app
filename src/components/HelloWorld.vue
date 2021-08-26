@@ -1,5 +1,6 @@
 <template>
-  <h1 @click="msgClick">{{ msg }}</h1>
+  <div>---HelloWorld Component Start---</div>
+  <h1>{{ msg }}</h1>
 
   <p>
     Recommended IDE setup:
@@ -33,6 +34,7 @@
     Edit
     <code>components/HelloWorld.vue</code> to test hot module replacement.
   </p>
+  <div>---HelloWorld Component End---</div>
 </template>
 
 <script lang="ts">
@@ -42,7 +44,6 @@ import { ref, defineComponent, onMounted } from 'vue'
 //import { counterStore } from '@/store/counter'
 import { useCounterStore } from '@/store';
 import { useSpaceStore } from '@/store';
-
 
 export default defineComponent({
   name: 'HelloWorld',
@@ -77,8 +78,8 @@ export default defineComponent({
     }
 
     return {
-      counter, incrementCount
-
+      counter,
+      incrementCount,
       //counterState: counterStore.getState(),
       //spaces: spaceStore.getState(),
     }

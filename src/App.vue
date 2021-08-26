@@ -3,7 +3,7 @@
   <Layout>
 
     <template v-slot:header-logo>
-      <div @click="changeRoute('/')" class="flex-shrink-0 flex items-center">
+      <div @click="routeTo('/')" class="flex-shrink-0 flex items-center">
         <img class="block lg:hidden h-8 w-auto" src="@/assets/images/logo.png" alt="Workflow" />
         <img class="hidden lg:block h-8 w-auto" src="@/assets/images/logo.png" alt="Workflow" />
       </div>
@@ -31,19 +31,26 @@
         <div>
           <MenuButton class="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             <span class="sr-only">Open user menu</span>
+            {{ user.email }}
             <img class="h-8 w-8 rounded-full" src="@/assets/images/anonymous.png" alt="user" />
           </MenuButton>
         </div>
         <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
           <MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
             <MenuItem v-slot="{ active }">
-              <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Your Profile</a>
+              <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">
+                Your Profile
+              </a>
             </MenuItem>
             <MenuItem v-slot="{ active }">
-              <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Settings</a>
+              <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">
+                Settings
+              </a>
             </MenuItem>
             <MenuItem v-slot="{ active }">
-              <a href="#" @click="logout" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign out</a>
+              <a href="#" @click="logout" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">
+                Sign out
+              </a>
             </MenuItem>
           </MenuItems>
         </transition>
@@ -59,13 +66,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue'
+import { defineComponent, inject, watch } from 'vue'
 //import HelloWorld from './components/HelloWorld.vue'
 //import Header from './components/layout/Header.vue'
 //import Header from '@/components/layout/Header.vue'
 //import Layout from '@uvicore/vue3/layouts/basic/Layout.vue'
 
-import Layout from '@uvicore/vue3'
+import Layout from '@/layout/Layout.vue';
 
 
 //import Header from './components/layout/Header.vue'
@@ -86,7 +93,7 @@ import {
   XIcon,
 } from '@heroicons/vue/outline'
 
-import { useUserStore } from '@uvicore/vue3/auth/store';
+import { useUserStore } from '@uvicore/vue-auth';
 
 //import { auth } from './auth';
 //import { auth } from '@/uvicore/auth/adapters/oidc';
@@ -121,10 +128,22 @@ export default defineComponent({
     const router = useRouter();
 
     const user = useUserStore();
-    console.log('USER: ', user);
-    console.log('USER: ', user.authenticated);
 
-    function changeRoute(route: string) {
+
+    // watch(() => user.email, (user) => {
+    //   console.log('xxx');
+    // })
+
+    // console.log('USER: ', user);
+    // console.log('USER: name ', user.name);
+    // console.log('USER: email ', user.email);
+    // console.log('USER: token ', user.token);
+    // console.log('USER: isAdmin ', user.isAdmin);
+    // console.log('USER: idp profile ', user.profile);
+    // console.log('USER: idp profile appId ', user.profile.applicationId);
+    // console.log('USER: authenticated ', user.authenticated);
+
+    function routeTo(route: string) {
       router.push(route);
     }
 
@@ -141,7 +160,7 @@ export default defineComponent({
     }
 
     return {
-      changeRoute,
+      routeTo,
       login,
       logout,
       user,

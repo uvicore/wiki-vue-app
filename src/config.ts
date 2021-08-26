@@ -1,4 +1,4 @@
-import { OidcAuth } from '@uvicore/vue3-auth';
+import { OidcAuth } from '@uvicore/vue-auth';
 
 
 export const config = {
@@ -8,9 +8,15 @@ export const config = {
   app: {
     // APIs using connection string naming
     apis: {
-      wiki: {
+      'wiki': {
+        name: 'wiki-uvicore-api',
         url: 'https://wiki-api-local.triglobal.io/api',
-        token: 'some-token-name-so-we-can-handle-multiple-jws-token'
+        uvicore: true
+      },
+      'tools': {
+        name: 'tools-uvicore-api',
+        url: 'https://tools-local.tgb.services/api',
+        uvicore: true
       },
     },
   },
@@ -24,15 +30,18 @@ export const config = {
   // ---------------------------------------------------------------------------
   auth: {
     driver: 'oidc', // oidc is currently the only driver implemented
+    appUrl: 'https://wiki-local.triglobal.io',
+    //uvicoreUserInfoUrl: 'https://wiki-api-local.triglobal.io/api/auth/userinfo',
+    uvicoreUserInfoUrl: 'https://iam-local.tgb.services/api/userinfo',
+    storage: 'localStorage',
+    storageKey: 'user',
     oidc: {
       adapter: OidcAuth,
-
       appName: 'wiki',
       appId: '7cc7d2a5-cc02-43ca-93bc-8476370ebf9d',
-      appUrl: 'https://wiki-local.triglobal.io',
       authUrl: 'https://auth-local.triglobal.io',
       logoutRedirectPath: '/logout',
-      storage: 'localStorage',
+      logLevel: 'Warn', // Debug, Error, Info, Warn, None (case sensitive)
     },
   }
 

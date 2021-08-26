@@ -1,12 +1,11 @@
-import axios from 'axios';
-import { Model, ModelConfig } from '@uvicore/vue-orm';
 import { Topic} from '@/models/topic';
-import { QueryBuilder } from '@uvicore/vue-orm';
-import { Ref, ref, UnwrapRef, inject } from 'vue';
-import { Results } from '@uvicore/vue-orm';
+import { reactive, UnwrapRef } from 'vue';
+import { Model, ModelConfig, QueryBuilder, Results } from '@uvicore/vue-orm';
 
-
-export class Post extends Model<Post>() {
+/**
+ * Post Model
+ */
+class PostModel extends Model {
   // API fields
   id: number
   slug: string
@@ -63,7 +62,7 @@ export class Post extends Model<Post>() {
     created_at, updated_at, indexed_at,
     slug_full,
     topic,
-  }: Post) {
+  }: PostModel) {
     super();
     this.id = id
     this.slug = slug
@@ -95,5 +94,19 @@ export class Post extends Model<Post>() {
         this.slug_full = this.topic.section.space.slug + this.topic.section.slug + this.topic.slug + '/' + this.slug
       }
     }
+  }
+}
+
+
+/**
+ * Space model statics (because Generics do not work on static properties)
+ */
+ export class Post extends PostModel {
+  public static query(): QueryBuilder<PostModel> {
+    return new QueryBuilder<PostModel>(PostModel);
+  }
+
+  public static newRef(): UnwrapRef<Results<PostModel>> {
+    return reactive<Results<PostModel>>(new Results());
   }
 }
