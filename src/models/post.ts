@@ -32,6 +32,7 @@ class PostModel extends Model {
   //updator: User|null
 
   static _config: ModelConfig = {
+    name: 'Post',
     connection: 'wiki',
     path: '/posts',
   }
@@ -98,6 +99,7 @@ class PostModel extends Model {
 }
 
 
+
 /**
  * Space model statics (because Generics do not work on static properties)
  */
@@ -108,5 +110,9 @@ class PostModel extends Model {
 
   public static newRef(): UnwrapRef<Results<PostModel>> {
     return reactive<Results<PostModel>>(new Results());
+  }
+
+  public static schema(): UnwrapRef<Results<any>> {
+    return PostModel.get_schema(PostModel._config.connection, PostModel._config.name);
   }
 }

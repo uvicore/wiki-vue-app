@@ -17,6 +17,7 @@ class SpaceModel extends Model {
   sections: Section[]|null
 
   static _config: ModelConfig = {
+    name: 'Space',
     connection: 'wiki',
     path: '/spaces',
   }
@@ -64,6 +65,10 @@ export class Space extends SpaceModel {
 
   public static newRef(): UnwrapRef<Results<SpaceModel>> {
     return reactive<Results<SpaceModel>>(new Results());
+  }
+
+  public static schema(): UnwrapRef<Results<any>> {
+    return SpaceModel.get_schema(SpaceModel._config.connection, SpaceModel._config.name);
   }
 }
 

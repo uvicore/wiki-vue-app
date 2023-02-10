@@ -23,6 +23,7 @@ class SectionModel extends Model {
   topics: Topic[]|null
 
   static _config: ModelConfig = {
+    name: 'Section',
     connection: 'wiki',
     path: '/sections',
   }
@@ -69,5 +70,9 @@ class SectionModel extends Model {
 
   public static newRef(): UnwrapRef<Results<SectionModel>> {
     return reactive<Results<SectionModel>>(new Results());
+  }
+
+  public static schema(): UnwrapRef<Results<any>> {
+    return SectionModel.get_schema(SectionModel._config.connection, SectionModel._config.name);
   }
 }

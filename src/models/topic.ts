@@ -22,6 +22,7 @@ export class TopicModel extends Model {
   section: Section|null
 
   static _config: ModelConfig = {
+    name: 'Topic',
     connection: 'wiki',
     path: '/topics',
   }
@@ -57,5 +58,9 @@ export class TopicModel extends Model {
 
   public static newRef(): UnwrapRef<Results<TopicModel>> {
     return reactive<Results<TopicModel>>(new Results());
+  }
+
+  public static schema(): UnwrapRef<Results<any>> {
+    return TopicModel.get_schema(TopicModel._config.connection, TopicModel._config.name);
   }
 }

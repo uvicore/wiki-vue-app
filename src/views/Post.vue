@@ -11,7 +11,9 @@
     <h1 class="text-xl">{{post.result.title}}</h1>
     <hr>
     <section>
-      {{post.result.body}}
+      <div class="prose">
+        <div v-html="post.result.body"></div>
+      </div>
     </section>
   </div>
 

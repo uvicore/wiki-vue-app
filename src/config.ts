@@ -10,14 +10,14 @@ export const config = {
     apis: {
       'wiki': {
         name: 'wiki-uvicore-api',
-        url: 'https://wiki-api-local.triglobal.io/api',
+        url: 'https://local.wiki.mreschke.net/api',
         uvicore: true
       },
-      'tools': {
-        name: 'tools-uvicore-api',
-        url: 'https://tools-local.tgb.services/api',
-        uvicore: true
-      },
+      // 'tools': {
+      //   name: 'tools-uvicore-api',
+      //   url: 'https://tools-local.tgb.services/api',
+      //   uvicore: true
+      // },
     },
   },
 
@@ -30,16 +30,15 @@ export const config = {
   // ---------------------------------------------------------------------------
   auth: {
     driver: 'oidc', // oidc is currently the only driver implemented
-    appUrl: 'https://wiki-local.triglobal.io',
-    //uvicoreUserInfoUrl: 'https://wiki-api-local.triglobal.io/api/auth/userinfo',
-    uvicoreUserInfoUrl: 'https://iam-local.tgb.services/api/userinfo',
+    appUrl: 'https://local.vue.wiki.mreschke.com',
+    uvicoreUserInfoUrl: 'https://local.iam.mreschke.net/api/userinfo',
     storage: 'localStorage',
     storageKey: 'user',
     oidc: {
       adapter: OidcAuth,
       appName: 'wiki',
-      appId: '7cc7d2a5-cc02-43ca-93bc-8476370ebf9d',
-      authUrl: 'https://auth-local.triglobal.io',
+      appId: 'e5f17737-231b-4abe-8760-03debc536af9',
+      authUrl: 'https://local.auth.mreschke.com',
       logoutRedirectPath: '/logout',
       logLevel: 'Warn', // Debug, Error, Info, Warn, None (case sensitive)
     },

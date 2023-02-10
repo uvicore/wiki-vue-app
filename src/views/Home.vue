@@ -4,6 +4,12 @@
     hi {{ user.email }}
     {{ user.token }}
 
+    <hr>
+
+    <pre>{{schema}}</pre>
+
+    <hr>
+
     <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
 
     <AuthInfo></AuthInfo>
@@ -30,6 +36,8 @@ import AuthInfo from '@/components/AuthInfo.vue';
 // import { Loading1 } from '@uvicore/vue3/components/loading';
 // import { User } from '@uvicore/vue3/auth/models';
 
+import { Space } from '../models';
+
 
 export default defineComponent({
   name: 'Home',
@@ -47,9 +55,13 @@ export default defineComponent({
     const user = useUserStore();
 
 
+    const schema = Space.schema()
+
+
     return {
       //loggedIn: auth.isAuthenticated as boolean
-      user
+      user,
+      schema
     }
   }
 

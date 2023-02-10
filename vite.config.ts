@@ -7,10 +7,10 @@ import path from 'path';
 export default defineConfig({
   // Dev Server
   server: {
-    host: "localhost",
-    port: 9206,
+    host: "0.0.0.0",
+    port: 7006,
     hmr: {
-      host: "wiki-local.triglobal.io",
+      host: "local.vue.wiki.mreschke.com",
       port: 443,
     }
   },

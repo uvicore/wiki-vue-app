@@ -36,15 +36,15 @@ auth.startup().then((ok: any) => {
     // Create Vue Application
     const app = createApp(App);
 
+    // Pinia Store (a vuex replacement)
+    // @ts-ignore
+    app.use(createPinia());
+
     // Configuration plugin
     // Accessible in our globalProperties using this.$config
     // But also as an injection token called 'config' since setup() cannot access 'this.'
     // @ts-ignore
     app.use(createConfig(config));
-
-    // Pinia Store (a vuex replacement)
-    // @ts-ignore
-    app.use(createPinia());
 
     // Authentication and authorization plugin
     // app.use(createAuth({

@@ -139,6 +139,8 @@ export default defineComponent({
     // but have the results set to our space store using .state(spaces)!
     Space.query().include(['sections.topics']).state(spaces).get();
 
+    console.log(spaces);
+
 
     // If we didn't have a store, we could return the result as a reactive ref
     //let spaces = Space.query().include(['sections.topics']).get();
